@@ -27,3 +27,14 @@ npm run dev
 ```bash
 npm test
 ```
+
+## Netlify deployment
+
+This app is a client-side routed SPA, so Netlify needs a fallback to `index.html`.
+
+Included in this repo:
+
+- `netlify.toml` with build/publish settings and SPA redirect
+- `public/_redirects` with `/* /index.html 200`
+
+If you still see a 404 on Netlify, verify the site is pointing at this repository root and that publish directory is `dist`.
