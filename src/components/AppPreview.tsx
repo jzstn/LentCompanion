@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import {
   BookOpen,
-  Candle,
   CheckCircle2,
   ChevronRight,
   Flame,
@@ -46,7 +45,7 @@ const PRAYER_ATTENTION = ['Focused', 'Wandering', 'Dry but faithful', 'Rushed', 
 const PRAYER_FRUIT = ['Peace', 'Gratitude', 'Hope', 'Patience', 'Love for others', 'Still struggling'];
 
 const eventLabel = (type: EventType): string => (type === 'JOURNAL' ? 'Journal' : type === 'PRAYER' ? 'Prayer' : 'Fasting');
-const eventIcon = (type: EventType) => (type === 'PRAYER' ? Candle : type === 'FAST' ? Flame : BookOpen);
+const eventIcon = (type: EventType) => (type === 'PRAYER' ? CheckCircle2 : type === 'FAST' ? Flame : BookOpen);
 
 const newId = (): string => `evt_${Math.random().toString(16).slice(2)}`;
 
@@ -354,7 +353,7 @@ export const AppPreview = () => {
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <div className="rounded-2xl bg-white p-4 ring-1 ring-zinc-200"><HeartHandshake className="h-4 w-4" /><div className="mt-2 flex flex-wrap gap-2">{insights.topTags.map((item) => <Pill key={item}>{item}</Pill>)}</div></div>
                     <div className="rounded-2xl bg-white p-4 ring-1 ring-zinc-200"><Flame className="h-4 w-4" /><div className="mt-2 flex flex-wrap gap-2">{insights.topFastingReasons.map((item) => <Pill key={item}>{item}</Pill>)}</div></div>
-                    <div className="rounded-2xl bg-white p-4 ring-1 ring-zinc-200"><Candle className="h-4 w-4" /><div className="mt-2 flex flex-wrap gap-2">{insights.topPrayerFruits.map((item) => <Pill key={item}>{item}</Pill>)}</div></div>
+                    <div className="rounded-2xl bg-white p-4 ring-1 ring-zinc-200"><CheckCircle2 className="h-4 w-4" /><div className="mt-2 flex flex-wrap gap-2">{insights.topPrayerFruits.map((item) => <Pill key={item}>{item}</Pill>)}</div></div>
                   </div>
                 )}
               </>
