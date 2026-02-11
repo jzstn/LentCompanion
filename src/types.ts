@@ -1,20 +1,42 @@
-export type EventType = 'journal' | 'prayer' | 'insight';
+export type MainTabKey = 'today' | 'journey' | 'library' | 'profile';
+export type JourneySectionKey = 'timeline' | 'reflections' | 'insights';
+export type ReflectionFilter = 'ALL' | 'JOURNAL' | 'PRAYER' | 'FAST';
 
-export type TabKey = 'record' | 'journey';
-export type JourneyView = 'timeline' | 'reflections' | 'insights';
+export type EventType = 'JOURNAL' | 'PRAYER' | 'FAST';
+export type RatingType = 'PEACE' | 'CLARITY';
+
+export interface JournalPayload {
+  text: string;
+}
+
+export interface PrayerPayload {
+  prayerType: string;
+  attentionState: string;
+  fruitTags: string[];
+}
+
+export interface FastPayload {
+  adherence: string;
+  reason: string;
+  next?: string;
+}
 
 export interface FastingEvent {
   id: string;
-  title: string;
-  createdAt: string;
   type: EventType;
-  notes: string;
-  chips: string[];
+  ts: string;
+  dayKey: string;
+  tags: string[];
+  rating?: {
+    type: RatingType;
+    value: number;
+  };
+  payload: JournalPayload | PrayerPayload | FastPayload;
 }
 
-export interface RecorderDraft {
-  type: EventType;
-  title: string;
-  notes: string;
-  chips: string[];
+export interface ConfirmState {
+  fAdh: string;
+  fReason: string;
+  pType: string;
+  pAttn: string;
 }

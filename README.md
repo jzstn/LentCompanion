@@ -1,19 +1,17 @@
 # Fasting Companion
 
-A Vite + React + TypeScript + Tailwind app for recording fasting-related entries and exploring a Journey Map with Timeline, Reflections, and Insights views.
+Vite + React + TypeScript + Tailwind prototype focused on a guided fasting/prayer/journal workflow.
 
-## Features
+## App structure
 
-- **Recorder flow** with confirmation modal and selectable chips.
-- **Chip constraints**:
-  - Journal entries: max 2 chips
-  - Prayer entries: max 2 chips
-- **Journey Map** with three views:
-  - Timeline
-  - Reflections
-  - Insights
-- **Entry detail modal** with in-place notes updates.
-- **Local storage persistence** with seed entries.
+- **Tabs:** Today, Journey Map, Library, Profile
+- **Journey Map sections:** Timeline, Reflections, Insights
+- **Confirmation Recorder:**
+  - Journal chips selectable, max 2
+  - Prayer fruit selectable, max 2
+  - FAST and PRAYER have required fields before save
+- **Entry detail modal** for viewing stored structured event payloads
+- **Local storage persistence** with seeded demo events
 
 ## Run locally
 
@@ -30,11 +28,7 @@ npm test
 
 ## Netlify deployment
 
-This app is a client-side routed SPA, so Netlify needs a fallback to `index.html`.
+This app is a client-side routed SPA and includes fallback rules to `index.html`:
 
-Included in this repo:
-
-- `netlify.toml` with build/publish settings and SPA redirect
+- `netlify.toml` redirect + build/publish settings
 - `public/_redirects` with `/* /index.html 200`
-
-If you still see a 404 on Netlify, verify the site is pointing at this repository root and that publish directory is `dist`.

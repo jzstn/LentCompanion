@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { DEFAULT_EVENTS, loadEvents, persistEvents, storageKey } from '../src/storage';
+import { loadEvents, persistEvents, seedEvents, storageKey } from '../src/storage';
 
 describe('storage', () => {
   beforeEach(() => {
@@ -7,11 +7,11 @@ describe('storage', () => {
   });
 
   it('returns seeded data when storage is empty', () => {
-    expect(loadEvents()).toEqual(DEFAULT_EVENTS);
+    expect(loadEvents()).toEqual(seedEvents());
   });
 
   it('persists and reads events', () => {
-    const next = [{ ...DEFAULT_EVENTS[0], id: 'custom' }];
+    const next = [{ ...seedEvents()[0], id: 'custom' }];
     persistEvents(next);
 
     expect(JSON.parse(localStorage.getItem(storageKey) ?? '[]')).toEqual(next);

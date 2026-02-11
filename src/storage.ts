@@ -1,50 +1,80 @@
-import type { FastingEvent, RecorderDraft } from './types';
+import type { FastingEvent } from './types';
 
-const STORAGE_KEY = 'fasting-app-events';
+const STORAGE_KEY = 'fasting-companion-events-v2';
 
-export const DEFAULT_EVENTS: FastingEvent[] = [
+export const seedEvents = (): FastingEvent[] => [
   {
-    id: 'seed-1',
-    title: 'Morning reflection',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(),
-    type: 'journal',
-    notes: 'I noticed impatience before lunch. I paused and redirected my focus.',
-    chips: ['honesty', 'gratitude']
+    id: 'evt_1',
+    type: 'PRAYER',
+    ts: '2026-02-09T07:10:00-05:00',
+    dayKey: '2026-02-09',
+    tags: ['Peace'],
+    payload: {
+      prayerType: 'Morning prayer',
+      attentionState: 'Focused',
+      fruitTags: ['Peace']
+    }
   },
   {
-    id: 'seed-2',
-    title: 'Prayer checkpoint',
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-    type: 'prayer',
-    notes: 'Asked for strength in self-control and clarity in service.',
-    chips: ['patience', 'charity']
+    id: 'evt_2',
+    type: 'FAST',
+    ts: '2026-02-09T12:30:00-05:00',
+    dayKey: '2026-02-09',
+    tags: [],
+    payload: {
+      adherence: 'Mostly kept it',
+      reason: 'Social situation',
+      next: 'Plan ahead'
+    }
+  },
+  {
+    id: 'evt_3',
+    type: 'JOURNAL',
+    ts: '2026-02-09T21:12:00-05:00',
+    dayKey: '2026-02-09',
+    tags: ['I was grateful', 'I need help with this'],
+    rating: { type: 'PEACE', value: 4 },
+    payload: {
+      text: 'Today I noticed I get impatient when I feel rushed. I want to return quickly.'
+    }
+  },
+  {
+    id: 'evt_4',
+    type: 'PRAYER',
+    ts: '2026-02-08T21:40:00-05:00',
+    dayKey: '2026-02-08',
+    tags: ['Hope'],
+    payload: {
+      prayerType: 'Evening prayer',
+      attentionState: 'Dry but faithful',
+      fruitTags: ['Hope']
+    }
+  },
+  {
+    id: 'evt_5',
+    type: 'FAST',
+    ts: '2026-02-08T13:00:00-05:00',
+    dayKey: '2026-02-08',
+    tags: [],
+    payload: {
+      adherence: 'Struggled today',
+      reason: 'Stress / emotions',
+      next: 'Ask mercy & restart'
+    }
   }
 ];
-
-export const toEvent = (draft: RecorderDraft): FastingEvent => ({
-  id: crypto.randomUUID(),
-  title: draft.title.trim(),
-  type: draft.type,
-  notes: draft.notes.trim(),
-  chips: draft.chips,
-  createdAt: new Date().toISOString()
-});
 
 export const loadEvents = (): FastingEvent[] => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      return DEFAULT_EVENTS;
+      return seedEvents();
     }
 
     const parsed = JSON.parse(raw) as FastingEvent[];
-    if (!Array.isArray(parsed)) {
-      return DEFAULT_EVENTS;
-    }
-
-    return parsed;
+    return Array.isArray(parsed) ? parsed : seedEvents();
   } catch {
-    return DEFAULT_EVENTS;
+    return seedEvents();
   }
 };
 
