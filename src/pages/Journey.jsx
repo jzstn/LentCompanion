@@ -171,7 +171,7 @@ const Journey = () => {
                                             </div>
                                         )}
                                         {selectedLog.payload?.next_step && (
-                                            <div style={{ border: '1px solid var(--border)', background: '#fff9f2', borderRadius: '18px', padding: '16px', border: '1px solid #e5c9a4' }}>
+                                            <div style={{ background: '#fff9f2', borderRadius: '18px', padding: '16px', border: '1px solid #e5c9a4' }}>
                                                 <h4 style={{ fontSize: '13px', color: '#c4a484', marginBottom: '8px' }}>Next Step</h4>
                                                 <p style={{ fontWeight: 600 }}>{selectedLog.payload.next_step}</p>
                                             </div>
