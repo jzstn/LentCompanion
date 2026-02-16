@@ -1,0 +1,1756 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fasting App (Single HTML)</title>
+    <style>
+        :root {
+            --bg: #fafafa;
+            --card: #ffffff;
+            --text: #18181b;
+            --muted: #71717a;
+            --border: #e4e4e7;
+            --chip: #f4f4f5;
+            --chipHover: #e4e4e7;
+            --primary: #18181b;
+            --primaryText: #ffffff;
+            --shadow: 0 1px 2px rgba(0, 0, 0, .04);
+            --radius-xl: 24px;
+            --radius-lg: 18px;
+            --radius-md: 14px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width:900px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .shell {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .brand {
+            padding: 16px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 16px;
+            background: var(--primary);
+        }
+
+        .brand .name {
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .brand .sub {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .divider {
+            border-top: 1px solid var(--border)
+        }
+
+        .nav {
+            padding: 8px
+        }
+
+        .nav button {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            padding: 12px 12px;
+            border-radius: 18px;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #3f3f46;
+            transition: background .15s;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav button:hover {
+            background: #f4f4f5
+        }
+
+        .nav button.active {
+            background: var(--primary);
+            color: var(--primaryText);
+        }
+
+        .chev {
+            opacity: .45
+        }
+
+        .nav button.active .chev {
+            opacity: .75
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            gap: 18px
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -.02em
+        }
+
+        .subtitle {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .seg {
+            display: inline-flex;
+            background: #f4f4f5;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 4px;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .seg button {
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .seg button.active {
+            background: var(--card);
+            color: var(--text);
+            box-shadow: var(--shadow);
+        }
+
+        .cards3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        @media (max-width:900px) {
+            .cards3 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .cardHead {
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .cardHeadLeft {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .iconBox {
+            width: 32px;
+            height: 32px;
+            border-radius: 12px;
+            background: #f4f4f5;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .cardTitle {
+            font-weight: 800;
+            font-size: 13px
+        }
+
+        .cardBody {
+            padding: 0 14px 14px;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .btn {
+            border: 0;
+            cursor: pointer;
+            border-radius: 16px;
+            padding: 10px 12px;
+            background: var(--primary);
+            color: var(--primaryText);
+            font-weight: 800;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn.secondary {
+            background: #fff;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 12px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #27272a;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .chipRow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px
+        }
+
+        .chip {
+            border: 1px solid var(--border);
+            background: var(--chip);
+            color: #27272a;
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+            user-select: none;
+        }
+
+        .chip:hover {
+            background: var(--chipHover)
+        }
+
+        .chip.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .chip.disabled {
+            opacity: .5;
+            cursor: not-allowed
+        }
+
+        .listCard {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .dayHead {
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .dayTitle {
+            font-weight: 800;
+            font-size: 13px
+        }
+
+        .smallMuted {
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .items {
+            border-top: 1px solid var(--border);
+            padding: 6px
+        }
+
+        .itemBtn {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            padding: 10px 10px;
+            border-radius: 18px;
+        }
+
+        .itemBtn:hover {
+            background: #fafafa
+        }
+
+        .itemRow {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px
+        }
+
+        .itemLeft {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start
+        }
+
+        .itemMain {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .itemTop {
+            font-weight: 800;
+            font-size: 13px
+        }
+
+        .itemTop span {
+            font-weight: 500;
+            color: var(--muted);
+            margin-left: 8px;
+            font-size: 12px
+        }
+
+        .footerNote {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Today card image */
+        .iconImage {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: #f4f4f5;
+            display: block;
+        }
+
+        /* ============================
+   BEIGE LUXURY SPONSOR FOOTER
+============================ */
+
+        .footerSponsor {
+            margin-top: 70px;
+            padding: 50px 20px 70px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .sponsorCard {
+            background: #F3EDE4;
+            border: 1px solid #e7e1d8;
+            border-radius: 30px;
+            padding: 28px 36px;
+            max-width: 560px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-decoration: none;
+            color: #1E1E1E;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+            transition: all .3s ease;
+        }
+
+        .sponsorCard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.12);
+        }
+
+        .sponsorLogo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 14px;
+        }
+
+        .sponsorText {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sponsorLabel {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #6E6A64;
+        }
+
+        .sponsorName {
+            font-weight: 900;
+            font-size: 17px;
+            margin-top: 4px;
+        }
+
+        .sponsorSub {
+            font-size: 13px;
+            color: #6E6A64;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+
+        /* Modal */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .35);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 16px;
+            z-index: 50;
+        }
+
+        .overlay.open {
+            display: flex
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 720px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, .15);
+            overflow: hidden;
+        }
+
+        .modalHead {
+            padding: 16px 16px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .modalTitle {
+            font-weight: 900
+        }
+
+        .modalSub {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .modalBody {
+            padding: 14px 16px 16px
+        }
+
+        .modalFoot {
+            border-top: 1px solid var(--border);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .ratingRow {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap
+        }
+
+        .ratingBtn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .ratingBtn.selected {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        pre {
+            background: #18181b;
+            color: #e4e4e7;
+            padding: 12px;
+            border-radius: 16px;
+            overflow: auto;
+            font-size: 12px;
+        }
+
+        .warn {
+            margin-top: 12px;
+            border: 1px solid #f59e0b55;
+            background: #fffbeb;
+            color: #92400e;
+            padding: 10px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="grid">
+            <aside class="shell">
+                <div class="brand">
+                    <div class="logo"></div>
+                    <div>
+                        <div class="name">Fasting</div>
+                        <div class="sub">Single-file prototype</div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="nav" id="nav"></div>
+            </aside>
+
+            <main class="main">
+                <div class="topbar">
+                    <div>
+                        <div class="title" id="pageTitle">Today</div>
+                        <div class="subtitle" id="pageSubtitle">Daily verse, fathers, and prayer — plus your logs.</div>
+                    </div>
+                    <div id="topRight"></div>
+                </div>
+
+                <div id="content"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div class="overlay" id="confirmOverlay" role="dialog" aria-modal="true">
+        <div class="modal">
+            <div class="modalHead">
+                <div>
+                    <div class="modalTitle">Saved. Quick check-in</div>
+                    <div class="modalSub">Optional — takes ~10 seconds. Selectable only.</div>
+                </div>
+                <button class="btn secondary" id="confirmCloseBtn">Close</button>
+            </div>
+            <div class="modalBody" id="confirmBody"></div>
+            <div class="modalFoot">
+                <div class="smallMuted">Your selections feed your Journey Map and gentle insights.</div>
+                <button class="btn" id="confirmSaveBtn">Save check-in →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL / GUIDED PRAYER MODAL -->
+    <div class="overlay" id="detailOverlay" role="dialog" aria-modal="true">
+        <div class="modal">
+            <div class="modalHead">
+                <div>
+                    <div class="modalTitle" id="detailTitle">Entry</div>
+                    <div class="modalSub" id="detailSub">—</div>
+                </div>
+                <button class="btn secondary" id="detailCloseBtn">Close</button>
+            </div>
+            <div class="modalBody" id="detailBody"></div>
+            <div class="modalFoot">
+                <div class="smallMuted" id="detailFootNote">This is your saved reflection/log.</div>
+                <button class="btn" id="detailDoneBtn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================
+       SPONSOR FOOTER
+  ============================ -->
+    <div class="footerSponsor">
+        <a class="sponsorCard" href="https://www.mystyra.com" target="_blank" rel="noopener">
+
+            <div class="iconBox sponsorLogo"
+                style="background: #1e1e1e; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;">
+                M</div>
+
+            <div class="sponsorText">
+                <div class="sponsorLabel">Official Sponsor</div>
+                <div class="sponsorName">Mystyra Prints</div>
+                <div class="sponsorSub">
+                    Part of Mystyra · Custom printing for t-shirts & apparel<br>
+                    www.mystyra.com
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <script>
+        /********************
+         * Storage + Seed
+         ********************/
+        const STORAGE_KEY = "fasting_app_events_v1";
+
+        function uid(prefix = "evt") {
+            return prefix + "_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+        }
+        function dayKeyFromISO(iso) { return iso.slice(0, 10); }
+        function formatDayLabel(dayKey) {
+            const d = new Date(dayKey + "T00:00:00");
+            return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+        }
+        function formatTime(iso) {
+            const d = new Date(iso);
+            return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+        }
+
+        function seedEvents() {
+            return [
+                {
+                    id: "evt_1",
+                    type: "PRAYER",
+                    ts: "2026-02-09T07:10:00-05:00",
+                    dayKey: "2026-02-09",
+                    tags: ["Peace"],
+                    payload: { prayerType: "Morning prayer", attentionState: "Focused", fruitTags: ["Peace"] },
+                    meta: { confirmed: true, confirmedAt: "2026-02-09T07:10:10-05:00", source: "CONFIRMATION_RECORDER", version: "1.0" }
+                },
+                {
+                    id: "evt_2",
+                    type: "FAST",
+                    ts: "2026-02-09T12:30:00-05:00",
+                    dayKey: "2026-02-09",
+                    tags: [],
+                    payload: { adherence: "Mostly kept it", reason: "Social situation", next: "Plan ahead" },
+                    meta: { confirmed: true, confirmedAt: "2026-02-09T12:30:10-05:00", source: "CONFIRMATION_RECORDER", version: "1.0" }
+                },
+                {
+                    id: "evt_3",
+                    type: "JOURNAL",
+                    ts: "2026-02-09T21:12:00-05:00",
+                    dayKey: "2026-02-09",
+                    tags: ["I was grateful", "I need help with this"],
+                    rating: { type: "PEACE", value: 4 },
+                    payload: { text: "" },
+                    meta: { confirmed: true, confirmedAt: "2026-02-09T21:12:10-05:00", source: "CONFIRMATION_RECORDER", version: "1.0" }
+                },
+                {
+                    id: "evt_4",
+                    type: "PRAYER",
+                    ts: "2026-02-08T21:40:00-05:00",
+                    dayKey: "2026-02-08",
+                    tags: ["Hope"],
+                    payload: { prayerType: "Evening prayer", attentionState: "Dry but faithful", fruitTags: ["Hope"] },
+                    meta: { confirmed: true, confirmedAt: "2026-02-08T21:40:10-05:00", source: "CONFIRMATION_RECORDER", version: "1.0" }
+                }
+            ];
+        }
+
+        function loadEvents() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return [];
+            try { return JSON.parse(raw) || []; } catch { return []; }
+        }
+        function saveEvents(list) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        }
+        function ensureSeeded() {
+            const existing = loadEvents();
+            if (existing.length) return existing;
+            const seeded = seedEvents();
+            saveEvents(seeded);
+            return seeded;
+        }
+
+        /********************
+         * Today content (Orthodox)
+         ********************/
+        // Small, safe sample set. You can expand later.
+        const TODAY_READINGS = [
+            {
+                key: "repentance",
+                title: "Return to Me",
+                theme: "Repentance",
+                motivation: "Repentance is not shame. It is returning home — with hope.",
+                verseText: "Return to Me with all your heart.",
+                verseRef: "Joel 2:12"
+            },
+            {
+                key: "hidden-fast",
+                title: "The Hidden Fast",
+                theme: "Fasting",
+                motivation: "Fasting is not about food. It is about freedom — and love made practical.",
+                verseText: "When you fast, anoint your head and wash your face.",
+                verseRef: "Matthew 6:17"
+            },
+            {
+                key: "mercy",
+                title: "Mercy Over Judgment",
+                theme: "Mercy",
+                motivation: "The heart becomes light when it forgives quickly and prays quietly.",
+                verseText: "Be merciful, just as your Father also is merciful.",
+                verseRef: "Luke 6:36"
+            },
+            {
+                key: "peace",
+                title: "Peace in the Heart",
+                theme: "Peace",
+                motivation: "Peace is not a mood — it is a gift guarded by prayer, humility, and restraint.",
+                verseText: "Peace I leave with you, My peace I give to you.",
+                verseRef: "John 14:27"
+            }
+        ];
+
+        // Theme-aligned Fathers (Desert + Early Church Fathers).
+        const FATHERS_BY_THEME = {
+            Repentance: [
+                { name: "St. Isaac the Syrian", quote: "This life has been given to you for repentance." },
+                { name: "St. John Climacus", quote: "Do not be surprised that you fall every day; do not give up, but stand your ground courageously." }
+            ],
+            Fasting: [
+                { name: "St. Basil the Great", quote: "Fasting was ordained in Paradise." },
+                { name: "St. John Chrysostom", quote: "Let the fast be observed not by the mouth alone, but by the eye, the ear, the feet, the hands, and all the members of our bodies." }
+            ],
+            Mercy: [
+                { name: "St. Silouan the Athonite", quote: "Where there is humility, there is love; where there is love, there is peace." },
+                { name: "St. Ephrem the Syrian", quote: "If you have peace in your heart, you will be able to give peace to others." }
+            ],
+            Peace: [
+                { name: "St. Seraphim of Sarov", quote: "Acquire the Spirit of peace, and thousands around you will be saved." },
+                { name: "St. Theophan the Recluse", quote: "The principal thing is to stand with the mind in the heart before God." }
+            ],
+            Default: [
+                { name: "St. Anthony the Great", quote: "Our life and our death are with our neighbor." }
+            ]
+        };
+
+        // Orthodox icon images by theme (public domain / Wikimedia / etc.)
+        // You can swap these URLs later with your preferred icon set.
+        const ICON_IMAGES = {
+            Repentance: "https://upload.wikimedia.org/wikipedia/commons/3/34/Prodigal_Son_icon.jpg",
+            Fasting: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Christ_in_the_Desert_icon.jpg",
+            Mercy: "https://upload.wikimedia.org/wikipedia/commons/0/0f/Christ_Pantocrator_Sinai.jpg",
+            Peace: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Icon_of_the_Transfiguration.jpg",
+            Default: "https://upload.wikimedia.org/wikipedia/commons/0/0f/Christ_Pantocrator_Sinai.jpg"
+        };
+
+        function getTodayReading() {
+            // deterministic rotation by date; replace later with real calendar logic if desired
+            const i = (new Date().getDate()) % TODAY_READINGS.length;
+            return TODAY_READINGS[i];
+        }
+
+        function getTodayFather(theme) {
+            const list = FATHERS_BY_THEME[theme] || FATHERS_BY_THEME.Default;
+            const i = (new Date().getDate()) % list.length;
+            return list[i];
+        }
+
+        function getLiturgicalSeason() {
+            // Simple awareness (not a full typikon). You can refine later.
+            const d = new Date();
+            const m = d.getMonth() + 1;
+            if (m === 12) return "Nativity Fast (seasonal)";
+            if (m === 1) return "Theophany season (seasonal)";
+            if (m === 3 || m === 4) return "Great Lent (seasonal)";
+            if (m === 8) return "Dormition Fast (seasonal)";
+            return "Ordinary time (seasonal)";
+        }
+
+        function getCurrentAffairsPrayer() {
+            // Non-political, evergreen intercessions (kept broad on purpose).
+            return [
+                "For the suffering in war and violence — that the Lord grant protection and mercy.",
+                "For refugees and displaced families — that the Lord provide shelter and comfort.",
+                "For the sick, the elderly, and the weary — that the Lord grant healing and strength.",
+                "For the lonely, the anxious, and the forgotten — that the Lord send consolation.",
+                "For peace in our homes and communities — that hearts be softened by repentance."
+            ];
+        }
+
+        /********************
+         * App State
+         ********************/
+        const NAV_TABS = [
+            { key: "today", label: "Today", icon: "🌿" },
+            { key: "journey", label: "Journey Map", icon: "🗺️" },
+            { key: "library", label: "Library", icon: "📖" },
+            { key: "profile", label: "Profile", icon: "✨" }
+        ];
+
+        const JOURNEY_SECTIONS = [
+            { key: "timeline", label: "Timeline" },
+            { key: "reflections", label: "Reflections" },
+            { key: "insights", label: "Insights" }
+        ];
+
+        const JOURNAL_CHIPS = [
+            "I noticed a pattern", "I understood a trigger", "I saw my weakness clearly", "I asked forgiveness",
+            "I fell, but returned", "I want to restart", "I resisted a temptation", "I chose patience",
+            "I guarded my tongue", "I chose peace", "I was grateful", "I served someone quietly", "I showed mercy",
+            "I need help with this", "I feel discouraged", "I feel hopeful"
+        ];
+
+        const FAST_ADHERENCE = ["Kept the fast", "Mostly kept it", "Struggled today", "Not today — restarting"];
+        const FAST_REASON = ["Hunger / low energy", "Social situation", "Stress / emotions", "Forgot / unprepared", "Health reason", "Other responsibilities"];
+        const FAST_NEXT = ["Simplify the next meal", "Plan ahead", "Ask mercy & restart", "Add a small act of charity", "Reach out for guidance"];
+
+        const PRAYER_TYPE = ["Morning prayer", "Evening prayer", "Jesus Prayer", "Psalm", "Akathist / Canon", "Spontaneous prayer"];
+        const PRAYER_ATTENTION = ["Focused", "Wandering", "Dry but faithful", "Rushed", "Deeply present"];
+        const PRAYER_FRUIT = ["Peace", "Compunction (softened heart)", "Gratitude", "Hope", "Patience", "Love for others", "Still struggling"];
+
+        let state = {
+            tab: "today",
+            journeySection: "timeline",
+            reflectionFilter: "ALL",
+            events: ensureSeeded(),
+
+            confirmOpen: false,
+            confirmType: "JOURNAL",
+            pendingEventId: null,
+
+            jTags: [],
+            jRatingType: "PEACE",
+            jRatingValue: 0,
+
+            fAdh: "",
+            fReason: "",
+            fNext: "",
+
+            pType: "",
+            pAttn: "",
+            pFruit: [],
+
+            detailEventId: null
+        };
+
+        function persist() { saveEvents(state.events); }
+        function updateEvent(id, patch) {
+            state.events = state.events.map(e => e.id === id ? ({ ...e, ...patch }) : e);
+            persist();
+        }
+        function getEvent(id) { return state.events.find(e => e.id === id) || null; }
+
+        function addEvent(type) {
+            const now = new Date().toISOString();
+            const evt = {
+                id: uid("evt"),
+                type,
+                ts: now,
+                dayKey: dayKeyFromISO(now),
+                tags: [],
+                payload: {},
+                meta: { confirmed: false, source: "DIRECT_LOG", version: "1.0" }
+            };
+            state.events = [evt, ...state.events];
+            persist();
+            openConfirm(type, evt.id);
+        }
+
+        /********************
+         * Insights
+         ********************/
+        function top3(arr) {
+            const m = new Map();
+            for (const x of arr) m.set(x, (m.get(x) || 0) + 1);
+            return Array.from(m.entries()).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k);
+        }
+        function computeMirror() {
+            const tags = [], fastReasons = [], prayerFruits = [];
+            for (const e of state.events) {
+                if (Array.isArray(e.tags)) tags.push(...e.tags);
+                if (e.type === "FAST" && e.payload?.reason) fastReasons.push(e.payload.reason);
+                if (e.type === "PRAYER" && Array.isArray(e.payload?.fruitTags)) prayerFruits.push(...e.payload.fruitTags);
+            }
+            return {
+                topTags: top3(tags),
+                topFastingReasons: top3(fastReasons),
+                topPrayerFruits: top3(prayerFruits),
+                mirror: [
+                    "You keep returning quickly after difficult moments.",
+                    "Stress days often align with fasting challenges — simplifying helps."
+                ],
+                nextStep: "Tomorrow: plan one simple meal + 2 minutes of Jesus Prayer."
+            };
+        }
+
+        /********************
+         * Rendering
+         ********************/
+        const navEl = document.getElementById("nav");
+        const contentEl = document.getElementById("content");
+        const pageTitleEl = document.getElementById("pageTitle");
+        const pageSubtitleEl = document.getElementById("pageSubtitle");
+        const topRightEl = document.getElementById("topRight");
+
+        function setTab(tab) {
+            state.tab = tab;
+            if (tab === "today") {
+                pageTitleEl.textContent = "Today";
+                pageSubtitleEl.textContent = "Daily verse, fathers, and prayer — plus your logs.";
+                topRightEl.innerHTML = "";
+            } else if (tab === "journey") {
+                pageTitleEl.textContent = "Journey Map";
+                pageSubtitleEl.textContent = "Your timeline, your reflections, and gentle insights.";
+                renderJourneySegmented();
+            } else if (tab === "library") {
+                pageTitleEl.textContent = "Library";
+                pageSubtitleEl.textContent = "Readings, verses, fathers, icons.";
+                topRightEl.innerHTML = "";
+            } else {
+                pageTitleEl.textContent = "Profile";
+                pageSubtitleEl.textContent = "Settings, reminders, privacy.";
+                topRightEl.innerHTML = "";
+            }
+            render();
+        }
+
+        function renderNav() {
+            navEl.innerHTML = "";
+            NAV_TABS.forEach(t => {
+                const btn = document.createElement("button");
+                btn.className = (state.tab === t.key) ? "active" : "";
+                btn.innerHTML = `<span>${t.icon} ${t.label}</span><span class="chev">›</span>`;
+                btn.onclick = () => setTab(t.key);
+                navEl.appendChild(btn);
+            });
+        }
+
+        function renderJourneySegmented() {
+            topRightEl.innerHTML = "";
+            const seg = document.createElement("div");
+            seg.className = "seg";
+            JOURNEY_SECTIONS.forEach(s => {
+                const b = document.createElement("button");
+                b.textContent = s.label;
+                b.className = state.journeySection === s.key ? "active" : "";
+                b.onclick = () => { state.journeySection = s.key; render(); };
+                seg.appendChild(b);
+            });
+            topRightEl.appendChild(seg);
+        }
+
+        function render() {
+            renderNav();
+            if (state.tab === "today") return renderToday();
+            if (state.tab === "journey") return renderJourney();
+            if (state.tab === "library") return renderPlaceholder("Coming soon", "This preview focuses on Today + Journey Map + confirmation recorder.");
+            if (state.tab === "profile") return renderPlaceholder("Coming soon", "Add preferences, notification schedules, export, etc.");
+        }
+
+        function renderPlaceholder(title, body) {
+            contentEl.innerHTML = `
+        <div class="card">
+          <div class="cardHead">
+            <div class="cardHeadLeft">
+              <div class="iconBox">✨</div>
+              <div class="cardTitle">${escapeHtml(title)}</div>
+            </div>
+          </div>
+          <div class="cardBody">${escapeHtml(body)}</div>
+        </div>
+      `;
+        }
+
+        function renderActionCard(title, icon, body, actionType) {
+            return `
+        <div class="card">
+          <div class="cardHead">
+            <div class="cardHeadLeft">
+              <div class="iconBox">${icon}</div>
+              <div class="cardTitle">${escapeHtml(title)}</div>
+            </div>
+            <button class="btn" data-action="${actionType}">Save →</button>
+          </div>
+          <div class="cardBody">${escapeHtml(body)}</div>
+        </div>
+      `;
+        }
+
+        // Today tab
+        function renderToday() {
+            const r = getTodayReading();
+            const father = getTodayFather(r.theme);
+            const season = getLiturgicalSeason();
+            const iconUrl = ICON_IMAGES[r.theme] || ICON_IMAGES.Default;
+            const worldPrayers = getCurrentAffairsPrayer();
+
+            contentEl.innerHTML = `
+        <div class="card">
+          <div class="cardHead">
+            <div class="cardHeadLeft">
+              <div class="iconBox">🕊️</div>
+              <div class="cardTitle">Today in the Church</div>
+            </div>
+            <span class="pill">${escapeHtml(season)}</span>
+          </div>
+
+          <div class="cardBody" style="color:var(--text)">
+            <img src="${escapeHtml(iconUrl)}" class="iconImage" alt="Orthodox icon"/>
+
+            <div style="margin-top:14px;font-weight:900;font-size:14px">
+              ${escapeHtml(r.title)}
+            </div>
+
+            <div style="margin-top:8px;color:var(--muted);line-height:1.6">
+              ${escapeHtml(r.motivation)}
+            </div>
+
+            <div style="margin-top:12px;border:1px solid var(--border);background:#fafafa;border-radius:18px;padding:12px">
+              <div style="font-weight:900">Scripture</div>
+              <div style="margin-top:6px;font-style:italic">
+                “${escapeHtml(r.verseText)}”
+              </div>
+              <div style="color:var(--muted);font-size:12px;margin-top:6px">
+                ${escapeHtml(r.verseRef)}
+              </div>
+            </div>
+
+            <div style="margin-top:14px;border:1px solid var(--border);border-radius:18px;padding:12px">
+              <div style="font-weight:900">Desert & Early Church Fathers</div>
+              <div style="margin-top:6px;font-style:italic;line-height:1.6">
+                “${escapeHtml(father.quote)}”
+              </div>
+              <div style="margin-top:6px;color:var(--muted);font-size:12px">
+                — ${escapeHtml(father.name)}
+              </div>
+              <div class="smallMuted" style="margin-top:8px">
+                (Aligned to theme: ${escapeHtml(r.theme)})
+              </div>
+            </div>
+
+            <div style="margin-top:14px;border:1px solid var(--border);background:#fafafa;border-radius:18px;padding:12px">
+              <div style="font-weight:900">Pray for the World</div>
+              <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
+                ${worldPrayers.map(p => `<div style="font-size:13px">• ${escapeHtml(p)}</div>`).join("")}
+              </div>
+            </div>
+
+            <button class="btn" style="margin-top:16px" id="prayBtn">
+              Pray with this →
+            </button>
+          </div>
+        </div>
+
+        <div style="height:16px"></div>
+
+        <div class="cards3">
+          ${renderActionCard("Log Prayer", "🕯️", "Tap save to see the confirmation recorder.", "PRAYER")}
+          ${renderActionCard("Log Fasting", "🔥", "Quick adherence + reason (optional next step).", "FAST")}
+          ${renderActionCard("Log Journal", "✍️", "Pick up to 2 chips + optional peace/clarity rating.", "JOURNAL")}
+        </div>
+      `;
+
+            contentEl.querySelectorAll("[data-action]").forEach(btn => {
+                btn.onclick = () => addEvent(btn.getAttribute("data-action"));
+            });
+
+            const prayBtn = document.getElementById("prayBtn");
+            if (prayBtn) {
+                prayBtn.onclick = () => openGuidedPrayer(r, father, worldPrayers);
+            }
+        }
+
+        function renderJourney() {
+            renderJourneySegmented();
+            if (state.journeySection === "timeline") return renderTimeline();
+            if (state.journeySection === "reflections") return renderReflections();
+            return renderInsights();
+        }
+
+        function renderTimeline() {
+            const buckets = bucketByDay(state.events);
+            contentEl.innerHTML = `
+        <div class="cards3">
+          <div class="card">
+            <div class="cardHead">
+              <div class="cardHeadLeft">
+                <div class="iconBox">✅</div>
+                <div class="cardTitle">Quick Log</div>
+              </div>
+            </div>
+            <div class="cardBody">
+              <button class="btn secondary" data-action="PRAYER">Prayer</button>
+              <button class="btn secondary" data-action="FAST" style="margin-left:8px">Fast</button>
+              <button class="btn secondary" data-action="JOURNAL" style="margin-left:8px">Journal</button>
+              <div class="footerNote">Logs save instantly; check-in is optional.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardHead">
+              <div class="cardHeadLeft">
+                <div class="iconBox">🗺️</div>
+                <div class="cardTitle">This Week</div>
+              </div>
+            </div>
+            <div class="cardBody">Nodes show activity. Tap a day to view what you logged.</div>
+          </div>
+
+          <div class="card">
+            <div class="cardHead">
+              <div class="cardHeadLeft">
+                <div class="iconBox">✨</div>
+                <div class="cardTitle">Spiritual Mirror</div>
+              </div>
+            </div>
+            <div class="cardBody">Insights stay gentle, never judgey.</div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="timelineList">
+          ${buckets.map(renderDayBlock).join("")}
+        </div>
+      `;
+
+            contentEl.querySelectorAll("[data-action]").forEach(btn => {
+                btn.onclick = () => addEvent(btn.getAttribute("data-action"));
+            });
+            contentEl.querySelectorAll("[data-open]").forEach(btn => {
+                btn.onclick = () => openDetail(btn.getAttribute("data-open"));
+            });
+        }
+
+        function renderDayBlock(day) {
+            return `
+        <div class="listCard">
+          <div class="dayHead">
+            <div>
+              <div class="dayTitle">${escapeHtml(formatDayLabel(day.dayKey))}</div>
+              <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+                <span class="pill">🕯️ ${day.counts.PRAYER}</span>
+                <span class="pill">🍞 ${day.counts.FAST}</span>
+                <span class="pill">✍️ ${day.counts.JOURNAL}</span>
+              </div>
+            </div>
+            <div class="smallMuted">Tap an item below</div>
+          </div>
+          <div class="items">
+            ${day.list.map(renderItem).join("")}
+          </div>
+        </div>
+      `;
+        }
+
+        function iconForType(type) {
+            if (type === "PRAYER") return "🕯️";
+            if (type === "FAST") return "🔥";
+            return "✍️";
+        }
+
+        function renderItem(e) {
+            const label = (e.type === "PRAYER") ? "Prayer" : (e.type === "FAST") ? "Fasting" : "Journal";
+            const pills = [];
+            if (e.type === "FAST") {
+                if (e.payload?.adherence) pills.push(e.payload.adherence);
+                if (e.payload?.reason) pills.push(e.payload.reason);
+            } else if (e.type === "PRAYER") {
+                (e.payload?.fruitTags || []).slice(0, 4).forEach(t => pills.push(t));
+            } else {
+                (e.tags || []).slice(0, 4).forEach(t => pills.push(t));
+            }
+            if (e.rating) pills.push(`${e.rating.type} ${e.rating.value}/5`);
+            if (e.meta && e.meta.confirmed === false) pills.push("Unconfirmed");
+
+            return `
+        <button class="itemBtn" data-open="${escapeHtml(e.id)}">
+          <div class="itemRow">
+            <div class="itemLeft">
+              <div class="iconBox">${iconForType(e.type)}</div>
+              <div class="itemMain">
+                <div class="itemTop">${label}<span>${escapeHtml(formatTime(e.ts))}</span></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  ${pills.map(p => `<span class="pill">${escapeHtml(String(p))}</span>`).join("")}
+                </div>
+              </div>
+            </div>
+            <div class="chev">›</div>
+          </div>
+        </button>
+      `;
+        }
+
+        function bucketByDay(events) {
+            const map = new Map();
+            events.forEach(e => {
+                if (!map.has(e.dayKey)) map.set(e.dayKey, []);
+                map.get(e.dayKey).push(e);
+            });
+            for (const [k, list] of map) {
+                list.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+                map.set(k, list);
+            }
+            const days = Array.from(map.keys()).sort((a, b) => new Date(b) - new Date(a));
+            return days.map(dayKey => {
+                const list = map.get(dayKey);
+                const counts = { PRAYER: 0, FAST: 0, JOURNAL: 0 };
+                list.forEach(e => counts[e.type]++);
+                return { dayKey, list, counts };
+            });
+        }
+
+        function renderReflections() {
+            const filterButtons = ["ALL", "JOURNAL", "PRAYER", "FAST"].map(k => {
+                const active = state.reflectionFilter === k ? "active" : "";
+                const label = (k === "ALL") ? "All" : (k.charAt(0) + k.slice(1).toLowerCase());
+                return `<button class="${active}" data-filter="${k}">${escapeHtml(label)}</button>`;
+            }).join("");
+
+            const list = state.events
+                .slice()
+                .sort((a, b) => new Date(b.ts) - new Date(a.ts))
+                .filter(e => state.reflectionFilter === "ALL" ? true : e.type === state.reflectionFilter);
+
+            contentEl.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div style="font-weight:900;font-size:14px">My Reflections</div>
+          <div class="seg">${filterButtons}</div>
+        </div>
+        <div style="height:12px"></div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          ${list.map(renderReflectionCard).join("")}
+        </div>
+      `;
+
+            contentEl.querySelectorAll("[data-filter]").forEach(b => {
+                b.onclick = () => {
+                    state.reflectionFilter = b.getAttribute("data-filter");
+                    render();
+                };
+            });
+            contentEl.querySelectorAll("[data-open]").forEach(btn => {
+                btn.onclick = () => openDetail(btn.getAttribute("data-open"));
+            });
+        }
+
+        function renderReflectionCard(e) {
+            const label = (e.type === "JOURNAL") ? "Journal" : (e.type === "PRAYER") ? "Prayer" : "Fasting";
+            const tags = (e.type === "PRAYER") ? (e.payload?.fruitTags || []) : (e.tags || []);
+            const pills = [];
+            tags.slice(0, 6).forEach(t => pills.push(t));
+            if (e.type === "FAST") {
+                if (e.payload?.adherence) pills.push(e.payload.adherence);
+                if (e.payload?.reason) pills.push(e.payload.reason);
+                if (e.payload?.next) pills.push(e.payload.next);
+            }
+            if (e.rating) pills.push(`${e.rating.type} ${e.rating.value}/5`);
+
+            return `
+        <div class="listCard">
+          <button class="itemBtn" data-open="${escapeHtml(e.id)}">
+            <div class="itemRow">
+              <div class="itemLeft">
+                <div class="iconBox">${iconForType(e.type)}</div>
+                <div class="itemMain">
+                  <div class="itemTop">${label}<span>${escapeHtml(formatDayLabel(e.dayKey))} • ${escapeHtml(formatTime(e.ts))}</span></div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    ${pills.map(p => `<span class="pill">${escapeHtml(String(p))}</span>`).join("")}
+                  </div>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+          </button>
+        </div>
+      `;
+        }
+
+        function renderInsights() {
+            const m = computeMirror();
+            contentEl.innerHTML = `
+        <div class="cards3">
+          ${renderMiniInsightCard("What I’m noticing", "🤝", m.topTags, "Top tags")}
+          ${renderMiniInsightCard("Common obstacles", "🔥", m.topFastingReasons, "Fasting reasons")}
+          ${renderMiniInsightCard("Prayer fruit", "🕯️", m.topPrayerFruits, "Most common fruit")}
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="listCard">
+          <div class="dayHead">
+            <div>
+              <div class="dayTitle">Compassionate Mirror</div>
+              <div class="smallMuted">Supportive reflections based on your selections.</div>
+            </div>
+            <span class="pill">SLM</span>
+          </div>
+          <div class="divider"></div>
+          <div class="modalBody" style="padding:14px">
+            ${m.mirror.map(x => `
+              <div style="border:1px solid var(--border);background:#fafafa;border-radius:18px;padding:12px;margin-bottom:10px;font-size:13px">
+                ${escapeHtml(x)}
+              </div>
+            `).join("")}
+            <div style="border:1px solid var(--border);background:#fff;border-radius:18px;padding:12px">
+              <div class="smallMuted" style="font-weight:800">Next step</div>
+              <div style="margin-top:6px;font-weight:900">${escapeHtml(m.nextStep)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+        }
+
+        function renderMiniInsightCard(title, icon, list, label) {
+            const pills = (list && list.length)
+                ? list.map(x => `<span class="pill">${escapeHtml(x)}</span>`).join("")
+                : `<span class="smallMuted">No data yet</span>`;
+
+            return `
+        <div class="card">
+          <div class="cardHead">
+            <div class="cardHeadLeft">
+              <div class="iconBox">${icon}</div>
+              <div class="cardTitle">${escapeHtml(title)}</div>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="smallMuted" style="font-weight:900">${escapeHtml(label)}</div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">${pills}</div>
+          </div>
+        </div>
+      `;
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        /********************
+         * Guided Prayer (Today button)
+         ********************/
+        function openGuidedPrayer(reading, father, worldPrayers) {
+            detailTitle.textContent = "Guided Prayer";
+            detailSub.textContent = "";
+            detailFootNote.textContent = "A simple prayer you can read aloud.";
+
+            detailBody.innerHTML = `
+        <div style="line-height:1.7;font-size:14px">
+          Lord Jesus Christ,
+          <br><br>
+          You have said: “${escapeHtml(reading.verseText)}”
+          <br><br>
+          Teach me to live this today.
+          <br><br>
+          As Your servant ${escapeHtml(father.name)} reminds us:
+          <br>
+          “${escapeHtml(father.quote)}”
+          <br><br>
+          I pray especially:
+          <br>
+          ${worldPrayers.map(p => `• ${escapeHtml(p)}<br>`).join("")}
+          <br>
+          Grant me repentance, humility, and courage.
+          <br><br>
+          Amen.
+        </div>
+      `;
+            detailOverlay.classList.add("open");
+        }
+
+        /********************
+         * Confirmation Modal
+         ********************/
+        const confirmOverlay = document.getElementById("confirmOverlay");
+        const confirmBody = document.getElementById("confirmBody");
+        const confirmCloseBtn = document.getElementById("confirmCloseBtn");
+        const confirmSaveBtn = document.getElementById("confirmSaveBtn");
+
+        confirmCloseBtn.onclick = () => closeConfirm();
+        confirmOverlay.addEventListener("click", (e) => { if (e.target === confirmOverlay) closeConfirm(); });
+
+        function openConfirm(type, eventId) {
+            state.confirmType = type;
+            state.pendingEventId = eventId;
+
+            state.jTags = [];
+            state.jRatingType = "PEACE";
+            state.jRatingValue = 0;
+
+            state.fAdh = "";
+            state.fReason = "";
+            state.fNext = "";
+
+            state.pType = "";
+            state.pAttn = "";
+            state.pFruit = [];
+
+            state.confirmOpen = true;
+            renderConfirmBody();
+            confirmOverlay.classList.add("open");
+            updateConfirmSaveEnabled();
+        }
+
+        function closeConfirm() {
+            state.confirmOpen = false;
+            state.pendingEventId = null;
+            confirmOverlay.classList.remove("open");
+        }
+
+        function isConfirmValid() {
+            if (state.confirmType === "FAST") return Boolean(state.fAdh && state.fReason);
+            if (state.confirmType === "PRAYER") return Boolean(state.pType && state.pAttn);
+            return true; // journal optional
+        }
+
+        function updateConfirmSaveEnabled() {
+            confirmSaveBtn.disabled = !isConfirmValid();
+        }
+
+        confirmSaveBtn.onclick = () => {
+            if (!isConfirmValid()) return;
+            const id = state.pendingEventId;
+            if (!id) return;
+
+            const now = new Date().toISOString();
+
+            if (state.confirmType === "JOURNAL") {
+                const rating = (state.jRatingValue >= 1 && state.jRatingValue <= 5)
+                    ? { type: state.jRatingType, value: state.jRatingValue }
+                    : undefined;
+
+                updateEvent(id, {
+                    tags: state.jTags,
+                    rating,
+                    payload: { text: "" },
+                    meta: { confirmed: true, confirmedAt: now, source: "CONFIRMATION_RECORDER", version: "1.0" }
+                });
+            }
+
+            if (state.confirmType === "FAST") {
+                updateEvent(id, {
+                    tags: [],
+                    payload: { adherence: state.fAdh, reason: state.fReason, next: state.fNext || undefined },
+                    meta: { confirmed: true, confirmedAt: now, source: "CONFIRMATION_RECORDER", version: "1.0" }
+                });
+            }
+
+            if (state.confirmType === "PRAYER") {
+                updateEvent(id, {
+                    tags: state.pFruit,
+                    payload: { prayerType: state.pType, attentionState: state.pAttn, fruitTags: state.pFruit },
+                    meta: { confirmed: true, confirmedAt: now, source: "CONFIRMATION_RECORDER", version: "1.0" }
+                });
+            }
+
+            closeConfirm();
+            render();
+        };
+
+        function chipButton(label, selected = false, disabled = false) {
+            const b = document.createElement("button");
+            b.className = "chip" + (selected ? " selected" : "") + (disabled ? " disabled" : "");
+            b.textContent = label;
+            if (disabled) b.disabled = true;
+            return b;
+        }
+
+        function renderConfirmBody() {
+            if (state.confirmType === "JOURNAL") {
+                confirmBody.innerHTML = `
+          <div style="font-weight:900">Journal review</div>
+          <div class="smallMuted">Pick up to 2 chips.</div>
+          <div class="chipRow" id="jChipRow"></div>
+
+          <div style="margin-top:14px;border:1px solid var(--border);background:#fafafa;border-radius:18px;padding:12px">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+              <div>
+                <div style="font-weight:900">Optional rating</div>
+                <div class="smallMuted">Peace or clarity — one tap.</div>
+              </div>
+              <div class="seg" id="ratingTypeSeg"></div>
+            </div>
+            <div class="ratingRow" id="ratingRow"></div>
+          </div>
+        `;
+
+                const row = document.getElementById("jChipRow");
+                JOURNAL_CHIPS.forEach(c => {
+                    const btn = chipButton(c, state.jTags.includes(c), false);
+                    btn.onclick = () => {
+                        const selected = state.jTags.includes(c);
+                        if (selected) state.jTags = state.jTags.filter(x => x !== c);
+                        else {
+                            if (state.jTags.length >= 2) return;
+                            state.jTags = [...state.jTags, c];
+                        }
+                        renderConfirmBody();
+                        updateConfirmSaveEnabled();
+                    };
+                    if (!state.jTags.includes(c) && state.jTags.length >= 2) btn.classList.add("disabled");
+                    row.appendChild(btn);
+                });
+
+                const seg = document.getElementById("ratingTypeSeg");
+                ["PEACE", "CLARITY"].forEach(t => {
+                    const b = document.createElement("button");
+                    b.textContent = t;
+                    b.className = (state.jRatingType === t) ? "active" : "";
+                    b.onclick = () => { state.jRatingType = t; renderConfirmBody(); updateConfirmSaveEnabled(); };
+                    seg.appendChild(b);
+                });
+
+                const ratingRow = document.getElementById("ratingRow");
+                [1, 2, 3, 4, 5].forEach(n => {
+                    const b = document.createElement("button");
+                    b.className = "ratingBtn" + (state.jRatingValue === n ? " selected" : "");
+                    b.textContent = n;
+                    b.onclick = () => { state.jRatingValue = n; renderConfirmBody(); updateConfirmSaveEnabled(); };
+                    ratingRow.appendChild(b);
+                });
+                return;
+            }
+
+            if (state.confirmType === "FAST") {
+                confirmBody.innerHTML = `
+          <div style="font-weight:900">Fasting check-in</div>
+          <div class="smallMuted">Adherence (required)</div>
+          <div class="chipRow" id="fAdh"></div>
+
+          <div style="margin-top:14px" class="smallMuted">Main reason (required)</div>
+          <div class="chipRow" id="fReason"></div>
+
+          <div style="margin-top:14px" class="smallMuted">Next step (optional)</div>
+          <div class="chipRow" id="fNext"></div>
+
+          <div class="warn" id="fWarn" style="display:none">
+            Please select adherence + a main reason, or close to skip.
+          </div>
+        `;
+
+                const adh = document.getElementById("fAdh");
+                FAST_ADHERENCE.forEach(c => {
+                    const btn = chipButton(c, state.fAdh === c);
+                    btn.onclick = () => { state.fAdh = c; renderConfirmBody(); updateConfirmSaveEnabled(); };
+                    adh.appendChild(btn);
+                });
+
+                const reason = document.getElementById("fReason");
+                FAST_REASON.forEach(c => {
+                    const btn = chipButton(c, state.fReason === c);
+                    btn.onclick = () => { state.fReason = c; renderConfirmBody(); updateConfirmSaveEnabled(); };
+                    reason.appendChild(btn);
+                });
+
+                const next = document.getElementById("fNext");
+                FAST_NEXT.forEach(c => {
+                    const btn = chipButton(c, state.fNext === c);
+                    btn.onclick = () => { state.fNext = c; renderConfirmBody(); updateConfirmSaveEnabled(); };
+                    next.appendChild(btn);
+                });
+
+                document.getElementById("fWarn").style.display = isConfirmValid() ? "none" : "block";
+                return;
+            }
+
+            // PRAYER
+            confirmBody.innerHTML = `
+        <div style="font-weight:900">Prayer check-in</div>
+        <div class="smallMuted">Prayer type (required)</div>
+        <div class="chipRow" id="pType"></div>
+
+        <div style="margin-top:14px" class="smallMuted">Attention (required)</div>
+        <div class="chipRow" id="pAttn"></div>
+
+        <div style="margin-top:14px" class="smallMuted">Fruit (pick up to 2, optional)</div>
+        <div class="chipRow" id="pFruit"></div>
+
+        <div class="warn" id="pWarn" style="display:none">
+          Please select prayer type + attention, or close to skip.
+        </div>
+      `;
+
+            const pType = document.getElementById("pType");
+            PRAYER_TYPE.forEach(c => {
+                const btn = chipButton(c, state.pType === c);
+                btn.onclick = () => { state.pType = c; renderConfirmBody(); updateConfirmSaveEnabled(); };
+                pType.appendChild(btn);
+            });
+
+            const pAttn = document.getElementById("pAttn");
+            PRAYER_ATTENTION.forEach(c => {
+                const btn = chipButton(c, state.pAttn === c);
+                btn.onclick = () => { state.pAttn = c; renderConfirmBody(); updateConfirmSaveEnabled(); };
+                pAttn.appendChild(btn);
+            });
+
+            const pFruit = document.getElementById("pFruit");
+            PRAYER_FRUIT.forEach(c => {
+                const selected = state.pFruit.includes(c);
+                const maxed = !selected && state.pFruit.length >= 2;
+                const btn = chipButton(c, selected, maxed);
+                btn.onclick = () => {
+                    if (maxed) return;
+                    if (selected) state.pFruit = state.pFruit.filter(x => x !== c);
+                    else state.pFruit = [...state.pFruit, c];
+                    renderConfirmBody();
+                    updateConfirmSaveEnabled();
+                };
+                pFruit.appendChild(btn);
+            });
+
+            document.getElementById("pWarn").style.display = isConfirmValid() ? "none" : "block";
+        }
+
+        /********************
+         * Detail Modal
+         ********************/
+        const detailOverlay = document.getElementById("detailOverlay");
+        const detailTitle = document.getElementById("detailTitle");
+        const detailSub = document.getElementById("detailSub");
+        const detailBody = document.getElementById("detailBody");
+        const detailFootNote = document.getElementById("detailFootNote");
+        const detailCloseBtn = document.getElementById("detailCloseBtn");
+        const detailDoneBtn = document.getElementById("detailDoneBtn");
+
+        detailCloseBtn.onclick = () => closeDetail();
+        detailDoneBtn.onclick = () => closeDetail();
+        detailOverlay.addEventListener("click", (e) => { if (e.target === detailOverlay) closeDetail(); });
+
+        function openDetail(id) {
+            state.detailEventId = id;
+            const e = getEvent(id);
+            if (!e) return;
+
+            detailFootNote.textContent = "This is your saved reflection/log.";
+            detailTitle.textContent = (e.type === "JOURNAL") ? "Journal Entry" : (e.type === "PRAYER") ? "Prayer Log" : "Fasting Log";
+            detailSub.textContent = `${formatDayLabel(e.dayKey)} • ${formatTime(e.ts)}`;
+
+            const pills = [];
+            if (e.type === "FAST") {
+                if (e.payload?.adherence) pills.push(e.payload.adherence);
+                if (e.payload?.reason) pills.push(e.payload.reason);
+                if (e.payload?.next) pills.push(e.payload.next);
+            } else if (e.type === "PRAYER") {
+                if (e.payload?.prayerType) pills.push(e.payload.prayerType);
+                if (e.payload?.attentionState) pills.push(e.payload.attentionState);
+                (e.payload?.fruitTags || []).forEach(t => pills.push(t));
+            } else {
+                (e.tags || []).forEach(t => pills.push(t));
+                if (e.rating) pills.push(`${e.rating.type} ${e.rating.value}/5`);
+            }
+
+            detailBody.innerHTML = `
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          ${pills.map(p => `<span class="pill">${escapeHtml(String(p))}</span>`).join("")}
+        </div>
+        <div style="border:1px solid var(--border);border-radius:18px;padding:14px;background:#fafafa;line-height:1.6;font-size:14px">
+  <div style="font-weight:900;margin-bottom:8px">Reflection</div>
+
+  ${e.type === "PRAYER" ? `
+      <div><strong>Prayer type:</strong> ${escapeHtml(e.payload?.prayerType || "-")}</div>
+      <div><strong>Attention:</strong> ${escapeHtml(e.payload?.attentionState || "-")}</div>
+      ${e.payload?.fruitTags?.length
+                        ? `<div><strong>Fruit noticed:</strong> ${escapeHtml(e.payload.fruitTags.join(", "))}</div>`
+                        : ""
+                    }
+    ` :
+                    e.type === "FAST" ? `
+      <div><strong>Adherence:</strong> ${escapeHtml(e.payload?.adherence || "-")}</div>
+      <div><strong>Reason:</strong> ${escapeHtml(e.payload?.reason || "-")}</div>
+      ${e.payload?.next
+                            ? `<div><strong>Next step:</strong> ${escapeHtml(e.payload.next)}</div>`
+                            : ""
+                        }
+    ` :
+                        `
+      ${e.tags?.length
+                            ? `<div><strong>Journal themes:</strong> ${escapeHtml(e.tags.join(", "))}</div>`
+                            : ""
+                        }
+      ${e.rating
+                            ? `<div><strong>${escapeHtml(e.rating.type)} rating:</strong> ${e.rating.value}/5</div>`
+                            : ""
+                        }
+    `
+                }
+</div>
+      `;
+
+            detailOverlay.classList.add("open");
+        }
+
+        function closeDetail() {
+            state.detailEventId = null;
+            detailOverlay.classList.remove("open");
+        }
+
+        // boot
+        setTab("today");
+    </script>
+</body>
+
+</html>
