@@ -61,11 +61,11 @@ export const FATHERS_BY_THEME = {
 // When local icons are ready in src/assets/icons/, import them here:
 // import repentanceImg from '../assets/icons/repentance.png'
 export const ICON_IMAGES = {
-    Repentance: "https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=1024&auto=format&fit=crop", // Placeholder for Prodigal Son Icon
-    Fasting: "https://images.unsplash.com/photo-1548625361-9494391694f2?q=80&w=1024&auto=format&fit=crop",    // Placeholder for Christ in Desert
-    Mercy: "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?q=80&w=1024&auto=format&fit=crop",      // Placeholder for Christ Pantocrator
-    Peace: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1024&auto=format&fit=crop",      // Placeholder for Peace/Nature icon
-    Default: "https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?q=80&w=1024&auto=format&fit=crop"
+    Repentance: "/today_banner.png",
+    Fasting: "/today_banner.png",
+    Mercy: "/today_banner.png",
+    Peace: "/today_banner.png",
+    Default: "/today_banner.png"
 }
 
 export function getTodayReading() {
