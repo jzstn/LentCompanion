@@ -56,7 +56,7 @@ const LiturgicalCard = ({ reflection }) => {
                     {reading.motivation}
                 </div>
 
-                <div style={{ marginTop: '12px', border: '1px solid var(--border)', background: '#fafafa', borderRadius: '18px', padding: '12px' }}>
+                <div style={{ marginTop: '14px', border: '1px solid var(--border)', background: '#fafafa', borderRadius: '18px', padding: '12px' }}>
                     <div style={{ fontWeight: 900 }}>Scripture</div>
                     <div style={{ marginTop: '6px', fontStyle: 'italic' }}>
                         “{reading.verseText}”
@@ -64,6 +64,12 @@ const LiturgicalCard = ({ reflection }) => {
                     <div style={{ color: 'var(--muted)', fontSize: '12px', marginTop: '6px' }}>
                         {reading.verseRef}
                     </div>
+                    {reflection?.bible_story && (
+                        <div style={{ marginTop: '10px', fontSize: '13px', color: 'var(--text)', borderTop: '1px solid var(--border)', paddingTop: '10px', lineHeight: '1.6' }}>
+                            <div className="smallMuted" style={{ fontWeight: 800, marginBottom: '4px' }}>Story & Reflection</div>
+                            {reflection.bible_story}
+                        </div>
+                    )}
                 </div>
 
                 <div style={{ marginTop: '14px', border: '1px solid var(--border)', borderRadius: '18px', padding: '12px' }}>
@@ -74,9 +80,12 @@ const LiturgicalCard = ({ reflection }) => {
                     <div style={{ marginTop: '6px', color: 'var(--muted)', fontSize: '12px' }}>
                         — {father.name}
                     </div>
-                    <div className="smallMuted" style={{ marginTop: '8px' }}>
-                        (Aligned to theme: {reading.theme})
-                    </div>
+                    {reflection?.desert_father_story && (
+                        <div style={{ marginTop: '10px', fontSize: '13px', color: 'var(--text)', borderTop: '1px solid var(--border)', paddingTop: '10px', lineHeight: '1.6' }}>
+                            <div className="smallMuted" style={{ fontWeight: 800, marginBottom: '4px' }}>Father's Wisdom Story</div>
+                            {reflection.desert_father_story}
+                        </div>
+                    )}
                 </div>
 
                 <div style={{ marginTop: '14px', border: '1px solid var(--border)', background: '#fafafa', borderRadius: '18px', padding: '12px' }}>
