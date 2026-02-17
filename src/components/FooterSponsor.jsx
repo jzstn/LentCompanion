@@ -9,16 +9,17 @@ const FooterSponsor = () => {
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                <div className="iconBox sponsorLogo" style={{
-                    background: '#1e1e1e',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    fontSize: '24px',
-                    width: '60px',
-                    height: '60px'
-                }}>
-                    M
-                </div>
+                <img
+                    src="/sponsor_logo.png"
+                    className="sponsorLogo"
+                    alt="Mystyra Logo"
+                    style={{
+                        width: '60px',
+                        height: '60px',
+                        borderRadius: '14px',
+                        objectFit: 'cover'
+                    }}
+                />
 
                 <div className="sponsorText">
                     <div className="sponsorLabel">Official Sponsor</div>
