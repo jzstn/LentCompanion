@@ -17,7 +17,13 @@ export default function Auth() {
     const handleSignUp = async (e) => {
         e.preventDefault()
         setLoading(true)
-        const { error } = await supabase.auth.signUp({ email, password })
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: window.location.origin
+            }
+        })
         if (error) alert(error.message)
         else alert('Check your email for the confirmation link!')
         setLoading(false)
