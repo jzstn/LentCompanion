@@ -46,7 +46,7 @@ const Today = () => {
                 desert_father_story: "A brother asked an elder, “What is repentance?” The elder replied, “It is to stop accusing others and begin accusing yourself—with hope in God’s mercy.”",
                 prayer_insight: "Prayer works like dawn: you rarely notice the exact moment it arrives, but you know when the light has changed everything.",
                 evening_common_prayer: "Monday Evening Prayer\nDaily Evening Prayers for the Great Fast\nMalankara Orthodox Syrian Church\n\n† In the name of the Father, / and of the Son, / and of the Holy Spirit, / one true God. Amin.",
-                image_url: "https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=1024&auto=format&fit=crop"
+                image_url: "/today_banner.png"
             }
             await db.saveReflection(sampleData)
             setReflection(sampleData)
