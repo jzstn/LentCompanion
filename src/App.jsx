@@ -1,101 +1,160 @@
-import { useMemo, useState } from 'react'
+import React, { useState } from 'react'
+import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, HelpCircle } from 'lucide-react'
 
-const initialForm = {
-    guestCount: 1
+const EVENT = {
+    childName: 'Liya',
+    title: 'Liya is Turning TWO!',
+    tagline: "With a super dee duper hug and a big ‘I love you’… come celebrate Liya turning TWO!",
+    date: 'Sunday, June 14',
+    time: '2:00 PM',
+    location: 'Hyatt Place Garden City',
+    address: '5 North Ave, Garden City, NY 11530',
+    rsvpTo: 'Mommy',
+    phone: '917-587-6735',
+    theme: 'Barney-inspired birthday celebration'
 }
 
-function App() {
-    const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false)
-    const [form, setForm] = useState(initialForm)
-    const [responses, setResponses] = useState([])
+const INVITATION_IMAGE_URL = '/invitation.png'
+
+export default function App() {
+    const [guestName, setGuestName] = useState('')
+    const [status, setStatus] = useState('yes')
+    const [adults, setAdults] = useState(1)
+    const [kids, setKids] = useState(1)
+    const [message, setMessage] = useState('')
     const [submitted, setSubmitted] = useState(false)
 
-    const event = {
-        title: "Ava's 2nd Birthday",
-        message: 'Please join us for cake, games, and bubbles!',
-        date: 'Saturday, June 15, 2026',
-        time: '11:00 AM - 2:00 PM',
-        venue: 'Sunshine Kids Park, Austin, TX'
+    function submitRsvp(eventItem) {
+        eventItem.preventDefault()
+        if (!guestName.trim()) return
+        setSubmitted(true)
     }
 
-    const stats = useMemo(() => {
-        const totalGuests = responses.reduce((sum, entry) => sum + Number(entry.guestCount || 0), 0)
-
-        return {
-            totalResponses: responses.length,
-            totalGuests
-        }
-    }, [responses])
-
-    const handleSubmit = (eventItem) => {
-        eventItem.preventDefault()
-
-        const newResponse = {
-            id: crypto.randomUUID(),
-            guestCount: Number(form.guestCount),
-            submittedAt: new Date().toLocaleString()
-        }
-
-        setResponses((current) => [newResponse, ...current])
-        setSubmitted(true)
-        setForm(initialForm)
-        setTimeout(() => setSubmitted(false), 3000)
+    function resetForm() {
+        setGuestName('')
+        setStatus('yes')
+        setAdults(1)
+        setKids(1)
+        setMessage('')
+        setSubmitted(false)
     }
 
     return (
-        <div className="page">
-            {!isEnvelopeOpen && (
-                <section className="envelope card">
-                    <p className="for">To: Dear Family 💌</p>
-                    <div className="envelope-art" aria-hidden="true">
-                        <div className="flap" />
-                        <div className="paper" />
+        <div className="app-shell">
+            <div className="container">
+                <header className="header">
+                    <div>
+                        <p className="eyebrow">Private Event RSVP</p>
+                        <h1>{EVENT.title}</h1>
+                        <p className="tagline">{EVENT.tagline}</p>
                     </div>
-                    <h1>You're Invited</h1>
-                    <p>Tap below to open this birthday invitation.</p>
-                    <button type="button" onClick={() => setIsEnvelopeOpen(true)}>Open Envelope</button>
-                </section>
-            )}
+                </header>
 
-            {isEnvelopeOpen && (
-                <section className="invite-layout">
-                    <article className="card invite">
-                        <p className="tag">2nd Birthday Party 🎉</p>
-                        <h2>{event.title}</h2>
-                        <p>{event.message}</p>
-                        <p><strong>Date:</strong> {event.date}</p>
-                        <p><strong>Time:</strong> {event.time}</p>
-                        <p><strong>Venue:</strong> {event.venue}</p>
-                    </article>
+                <main className="layout">
+                    <section>
+                        <article className="card image-card">
+                            <div className="image-wrap">
+                                <img src={INVITATION_IMAGE_URL} alt="Liya's 2nd birthday invitation" />
+                            </div>
+                        </article>
+                    </section>
 
-                    <form className="card form" onSubmit={handleSubmit}>
-                        <h2>Quick RSVP</h2>
-                        <p className="helper">Enter only how many guests are coming.</p>
-                        <label>
-                            Number of guests coming
-                            <input
-                                type="number"
-                                min="1"
-                                max="10"
-                                required
-                                value={form.guestCount}
-                                onChange={(eventItem) => setForm({ guestCount: eventItem.target.value })}
-                            />
-                        </label>
+                    <section className="stack">
+                        <article className="card info-card">
+                            <div className="info-grid">
+                                <Info icon={<CalendarDays />} label="Date & Time" value={`${EVENT.date} · ${EVENT.time}`} />
+                                <Info icon={<MapPin />} label="Location" value={`${EVENT.location}\n${EVENT.address}`} />
+                            </div>
+                        </article>
 
-                        <button type="submit">Send RSVP</button>
-                        {submitted && <p className="success">Thank you! RSVP sent.</p>}
-                    </form>
+                        <article className="card form-card">
+                            {!submitted ? (
+                                <form onSubmit={submitRsvp} className="form">
+                                    <div>
+                                        <h3>Will you celebrate with us?</h3>
+                                        <p>Please RSVP so we can plan food, seating, and birthday fun.</p>
+                                    </div>
 
-                    <aside className="card summary">
-                        <h3>RSVP Status</h3>
-                        <p><strong>{stats.totalResponses}</strong> responses</p>
-                        <p><strong>{stats.totalGuests}</strong> guests expected</p>
-                    </aside>
-                </section>
-            )}
+                                    <label>
+                                        <span>Guest / family name</span>
+                                        <input
+                                            value={guestName}
+                                            onChange={(eventItem) => setGuestName(eventItem.target.value)}
+                                            placeholder="Example: Varghese Family"
+                                        />
+                                    </label>
+
+                                    <div className="choices">
+                                        <RsvpChoice active={status === 'yes'} onClick={() => setStatus('yes')} icon={<CheckCircle2 />} label="Yes" />
+                                        <RsvpChoice active={status === 'maybe'} onClick={() => setStatus('maybe')} icon={<HelpCircle />} label="Maybe" />
+                                        <RsvpChoice active={status === 'no'} onClick={() => setStatus('no')} icon={<XCircle />} label="No" />
+                                    </div>
+
+                                    {status === 'yes' && (
+                                        <div className="num-grid">
+                                            <NumberField label="Adults" value={adults} setValue={setAdults} />
+                                            <NumberField label="Kids" value={kids} setValue={setKids} />
+                                        </div>
+                                    )}
+
+                                    <label>
+                                        <span>Message / allergy note</span>
+                                        <textarea
+                                            value={message}
+                                            onChange={(eventItem) => setMessage(eventItem.target.value)}
+                                            placeholder="Optional note for the host"
+                                            rows={4}
+                                        />
+                                    </label>
+
+                                    <button className="primary-btn" type="submit">Submit RSVP</button>
+                                </form>
+                            ) : (
+                                <div className="success-state">
+                                    <div className="success-icon">
+                                        <CheckCircle2 />
+                                    </div>
+                                    <h3>RSVP received!</h3>
+                                    <p>Thank you. The host will upload all responses to Google Sheets.</p>
+                                    <button onClick={resetForm} className="outline-btn" type="button">Add another RSVP</button>
+                                </div>
+                            )}
+                        </article>
+
+                        <div className="contact">
+                            <Mail size={16} /> Questions? RSVP to {EVENT.rsvpTo}: {EVENT.phone}
+                        </div>
+                    </section>
+                </main>
+            </div>
         </div>
     )
 }
 
-export default App
+function Info({ icon, label, value }) {
+    return (
+        <div className="info">
+            <div className="icon-wrap">{React.cloneElement(icon, { size: 20 })}</div>
+            <p className="label">{label}</p>
+            <p className="value">{value}</p>
+        </div>
+    )
+}
+
+function RsvpChoice({ active, onClick, icon, label }) {
+    return (
+        <button type="button" onClick={onClick} className={`choice ${active ? 'active' : ''}`}>
+            <div>{React.cloneElement(icon, { size: 18 })}</div>
+            <div>{label}</div>
+        </button>
+    )
+}
+
+function NumberField({ label, value, setValue }) {
+    return (
+        <label>
+            <span>{label}</span>
+            <input type="number" min="0" value={value} onChange={(eventItem) => setValue(Number(eventItem.target.value))} />
+        </label>
+    )
+}
