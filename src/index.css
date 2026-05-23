@@ -42,3 +42,7 @@ textarea { resize: vertical; min-height: 96px; }
 .helper { margin: 0; color:#475569; font-size:.88rem; }
 .error { margin: 0; color:#b91c1c; font-size:.88rem; font-weight:600; }
 .primary-btn:disabled { opacity:.55; cursor:not-allowed; }
+
+.invite-row { display:grid; grid-template-columns: 1fr auto; gap:8px; }
+.lookup-btn { border:1px solid #cbd5e1; background:#fff; color:#334155; border-radius:12px; padding:0 12px; font:inherit; font-weight:700; cursor:pointer; }
+.lookup-btn:disabled { opacity:.6; cursor:not-allowed; }
