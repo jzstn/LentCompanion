@@ -3,7 +3,6 @@ import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, Users } from 'lucide
 
 const EVENT = {
     title: 'Liya is Turning TWO!',
-    tagline: "With a super dee duper hug and a big ‘I love you’… come celebrate Liya turning TWO!",
     date: 'Sunday, June 14',
     time: '2:00 PM',
     location: 'Hyatt Place Garden City',
