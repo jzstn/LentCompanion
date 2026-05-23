@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, HelpCircle, Users } from 'lucide-react'
 
 const EVENT = {
@@ -14,7 +14,12 @@ const EVENT = {
 
 // Add your image at: public/invitation.png
 const INVITATION_IMAGE_URL = '/invitation.png'
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwxv_4LReVE8LSpxLYOHjXeADW08gVaaz8YwStF2x1xtk2w6EH44Fd9ICAnWkDd9Zad/exec'
+
+const GUEST_LIMITS = {
+    LIYA001: { label: 'Varghese Family', maxGuests: 4 },
+    LIYA002: { label: 'Joseph Family', maxGuests: 3 },
+    LIYA003: { label: 'Asha Family', maxGuests: 5 }
+}
 
 export default function App() {
     const [inviteCode, setInviteCode] = useState('')
@@ -23,108 +28,25 @@ export default function App() {
     const [kids, setKids] = useState(1)
     const [message, setMessage] = useState('')
     const [submitted, setSubmitted] = useState(false)
-    const [loadingInvite, setLoadingInvite] = useState(false)
-    const [inviteError, setInviteError] = useState('')
-    const [saveError, setSaveError] = useState('')
-    const [guest, setGuest] = useState(null)
 
-    useEffect(() => {
-        const urlCode = new URLSearchParams(window.location.search).get('code') || ''
-        if (urlCode) {
-            const normalized = urlCode.trim().toUpperCase()
-            setInviteCode(normalized)
-            lookupInvite(normalized)
-        }
-    }, [])
-
-    const maxGuests = useMemo(() => {
-        if (!guest) return 0
-        return Number(guest.adultsInvited || 0) + Number(guest.kidsInvited || 0)
-    }, [guest])
-
+    const invite = useMemo(() => GUEST_LIMITS[inviteCode.trim().toUpperCase()] ?? null, [inviteCode])
     const totalComing = Number(adults || 0) + Number(kids || 0)
-    const exceedsLimit = guest && status === 'yes' && totalComing > maxGuests
+    const exceedsLimit = invite && status === 'yes' && totalComing > invite.maxGuests
 
-    async function lookupInvite(codeValue) {
-        const code = codeValue.trim().toUpperCase()
-        if (!code) {
-            setGuest(null)
-            setInviteError('')
-            return
-        }
-
-        setLoadingInvite(true)
-        setInviteError('')
-        setSaveError('')
-
-        try {
-            const response = await fetch(`${APPS_SCRIPT_URL}?code=${encodeURIComponent(code)}`)
-            const payload = await response.json()
-
-            if (!payload.ok) {
-                setGuest(null)
-                setInviteError(payload.error || 'Invalid invite code. Please check and try again.')
-                return
-            }
-
-            setGuest(payload.guest)
-            setInviteError('')
-        } catch (_error) {
-            setGuest(null)
-            setInviteError('Unable to connect to guest list right now. Please try again.')
-        } finally {
-            setLoadingInvite(false)
-        }
-    }
-
-    async function submitRsvp(eventItem) {
+    function submitRsvp(eventItem) {
         eventItem.preventDefault()
-        setSaveError('')
-
-        if (!guest) {
-            setSaveError('Please enter a valid invite code.')
-            return
-        }
-
-        if (status === 'yes' && exceedsLimit) {
-            setSaveError('You selected more than your allowed guest limit.')
-            return
-        }
-
-        const body = {
-            code: inviteCode.trim().toUpperCase(),
-            status,
-            adultsComing: status === 'yes' ? Number(adults || 0) : 0,
-            kidsComing: status === 'yes' ? Number(kids || 0) : 0,
-            message
-        }
-
-        try {
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            })
-            const payload = await response.json()
-
-            if (!payload.ok) {
-                setSaveError(payload.error || 'Could not save RSVP. Please try again.')
-                return
-            }
-
-            setSubmitted(true)
-        } catch (_error) {
-            setSaveError('Network error while sending RSVP. Please try again.')
-        }
+        if (!invite) return
+        if (status === 'yes' && exceedsLimit) return
+        setSubmitted(true)
     }
 
     function resetForm() {
+        setInviteCode('')
         setStatus('yes')
         setAdults(1)
         setKids(1)
         setMessage('')
         setSubmitted(false)
-        setSaveError('')
     }
 
     return (
@@ -140,7 +62,13 @@ export default function App() {
                     <section>
                         <article className="card image-card">
                             <div className="image-wrap">
-                                <img src={INVITATION_IMAGE_URL} alt="Liya birthday invitation" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+                                <img
+                                    src={INVITATION_IMAGE_URL}
+                                    alt="Liya birthday invitation"
+                                    onError={(eventItem) => {
+                                        eventItem.currentTarget.style.display = 'none'
+                                    }}
+                                />
                                 <p className="image-help">Put your card image at <strong>public/invitation.png</strong></p>
                             </div>
                         </article>
@@ -150,8 +78,7 @@ export default function App() {
                         <article className="card info-card">
                             <div className="info-grid">
                                 <Info icon={<CalendarDays />} label="Date & Time" value={`${EVENT.date} · ${EVENT.time}`} />
-                                <Info icon={<MapPin />} label="Location" value={`${EVENT.location}
-${EVENT.address}`} />
+                                <Info icon={<MapPin />} label="Location" value={`${EVENT.location}\n${EVENT.address}`} />
                             </div>
                         </article>
 
@@ -165,17 +92,24 @@ ${EVENT.address}`} />
 
                                     <label>
                                         <span>Invite code</span>
-                                        <div className="invite-row">
-                                            <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required />
-                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite}>{loadingInvite ? 'Checking...' : 'Check'}</button>
-                                        </div>
+                                        <input
+                                            value={inviteCode}
+                                            onChange={(eventItem) => setInviteCode(eventItem.target.value)}
+                                            placeholder="Example: LIYA001"
+                                            required
+                                        />
                                     </label>
 
-                                    {guest && (
-                                        <div className="limit-box"><Users size={16} /><span><strong>{guest.familyName}</strong>: You can RSVP up to <strong>{maxGuests}</strong> guests.</span></div>
+                                    {invite && (
+                                        <div className="limit-box">
+                                            <Users size={16} />
+                                            <span>
+                                                {invite.label}: You can RSVP up to <strong>{invite.maxGuests}</strong> guests.
+                                            </span>
+                                        </div>
                                     )}
 
-                                    {inviteError && <p className="error">{inviteError}</p>}
+                                    {!invite && inviteCode.trim() && <p className="error">Invalid invite code. Please check and try again.</p>}
 
                                     <div className="choices">
                                         <RsvpChoice active={status === 'yes'} onClick={() => setStatus('yes')} icon={<CheckCircle2 />} label="Yes" />
@@ -189,30 +123,36 @@ ${EVENT.address}`} />
                                                 <NumberField label="Adults" value={adults} setValue={setAdults} />
                                                 <NumberField label="Kids" value={kids} setValue={setKids} />
                                             </div>
-                                            {guest && <p className="helper">Total selected: {totalComing} / {maxGuests}</p>}
+                                            {invite && <p className="helper">Total selected: {totalComing} / {invite.maxGuests}</p>}
                                             {exceedsLimit && <p className="error">You selected more than your allowed guest limit.</p>}
                                         </>
                                     )}
 
                                     <label>
                                         <span>Message / allergy note</span>
-                                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Optional note for the host" rows={4} />
+                                        <textarea
+                                            value={message}
+                                            onChange={(eventItem) => setMessage(eventItem.target.value)}
+                                            placeholder="Optional note for the host"
+                                            rows={4}
+                                        />
                                     </label>
 
-                                    {saveError && <p className="error">{saveError}</p>}
-                                    <button className="primary-btn" type="submit" disabled={!guest || exceedsLimit}>Submit RSVP</button>
+                                    <button className="primary-btn" type="submit" disabled={!invite || exceedsLimit}>Submit RSVP</button>
                                 </form>
                             ) : (
                                 <div className="success-state">
                                     <div className="success-icon"><CheckCircle2 /></div>
                                     <h3>RSVP received!</h3>
-                                    <p>Thank you. Your RSVP has been saved in Google Sheets.</p>
-                                    <button onClick={resetForm} className="outline-btn" type="button">Update RSVP</button>
+                                    <p>Thank you. The host will upload all responses to Google Sheets.</p>
+                                    <button onClick={resetForm} className="outline-btn" type="button">Add another RSVP</button>
                                 </div>
                             )}
                         </article>
 
-                        <div className="contact"><Mail size={16} /> Questions? RSVP to {EVENT.rsvpTo}: {EVENT.phone}</div>
+                        <div className="contact">
+                            <Mail size={16} /> Questions? RSVP to {EVENT.rsvpTo}: {EVENT.phone}
+                        </div>
                     </section>
                 </main>
             </div>
