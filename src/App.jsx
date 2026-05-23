@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, HelpCircle, Users } from 'lucide-react'
 
 const EVENT = {
