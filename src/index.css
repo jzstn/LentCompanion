@@ -24,13 +24,14 @@ label { display: grid; gap: 8px; }
 label span { font-size: .88rem; font-weight: 700; color: #334155; }
 input, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 16px; padding: 12px 14px; font: inherit; background: #f8fafc; }
 textarea { resize: vertical; min-height: 96px; }
-.choices { display: grid; gap: 10px; grid-template-columns: repeat(3,minmax(0,1fr)); }
+.choices { display: grid; gap: 10px; grid-template-columns: repeat(2,minmax(0,1fr)); }
 .choice { border: 1px solid #cbd5e1; border-radius: 16px; padding: 12px; text-align: left; background: #fff; display: grid; gap: 8px; cursor: pointer; }
 .choice.active { border-color: #6d28d9; background: #f5f3ff; color: #5b21b6; box-shadow: 0 0 0 4px #ede9fe; }
 .num-grid { display: grid; gap: 10px; grid-template-columns: repeat(2,minmax(0,1fr)); }
 .primary-btn, .outline-btn { border-radius: 16px; padding: 13px; font-weight: 800; font: inherit; cursor: pointer; }
 .primary-btn { border: 0; background: #6d28d9; color: #fff; }
 .outline-btn { border: 1px solid #cbd5e1; background: #fff; }
+.primary-btn, .lookup-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .success-state { text-align: center; padding: 14px 4px; }
 .success-icon { width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 999px; background: #dcfce7; color: #15803d; display: grid; place-items: center; }
 .contact { display: flex; align-items: center; gap: 8px; background: #ffffffb3; border-radius: 20px; border: 1px solid #e2e8f0; padding: 12px 14px; color: #64748b; font-size: .9rem; }
@@ -47,5 +48,17 @@ textarea { resize: vertical; min-height: 96px; }
 .lookup-btn { border:1px solid #cbd5e1; background:#fff; color:#334155; border-radius:12px; padding:0 12px; font:inherit; font-weight:700; cursor:pointer; }
 .lookup-btn:disabled { opacity:.6; cursor:not-allowed; }
 
-.api-warning { margin: 0 0 8px; background:#fff7ed; color:#9a3412; border:1px solid #fdba74; padding:8px 10px; border-radius:10px; font-size:.88rem; }
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 999px;
+  animation: spin 0.7s linear infinite;
+}
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.api-warning { margin: 0 0 8px; background:#fff7ed; color:#9a3412; border:1px solid #fdba74; padding:8px 10px; border-radius:10px; font-size:.88rem; }
