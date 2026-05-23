@@ -49,4 +49,3 @@ textarea { resize: vertical; min-height: 96px; }
 
 .api-warning { margin: 0 0 8px; background:#fff7ed; color:#9a3412; border:1px solid #fdba74; padding:8px 10px; border-radius:10px; font-size:.88rem; }
 
-.locked-input { background:#e5e7eb !important; color:#475569; cursor:not-allowed; }

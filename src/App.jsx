@@ -15,7 +15,6 @@ const EVENT = {
 // Add your image at: public/invitation.png
 const INVITATION_IMAGE_URL = '/invitation.png'
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYDI1BUMiqJ7cN_xh-vQ6giXm3bXaLAYdFskrH-Bhk1yUhCwUFjblKH6x06x5K06Am/exec'
-
 export default function App() {
     const [inviteCode, setInviteCode] = useState('')
     const [status, setStatus] = useState('yes')
@@ -28,14 +27,12 @@ export default function App() {
     const [saveError, setSaveError] = useState('')
     const [guest, setGuest] = useState(null)
     const [apiOffline, setApiOffline] = useState(false)
-    const [isCodeLocked, setIsCodeLocked] = useState(false)
 
     useEffect(() => {
         const urlCode = new URLSearchParams(window.location.search).get('code') || ''
         if (urlCode) {
             const normalized = urlCode.trim().toUpperCase()
             setInviteCode(normalized)
-            setIsCodeLocked(true)
             lookupInvite(normalized)
         }
     }, [])
@@ -99,19 +96,18 @@ export default function App() {
             return
         }
 
-        const body = {
+        const params = new URLSearchParams({
             code: inviteCode.trim().toUpperCase(),
             status,
-            adultsComing: status === 'yes' ? Number(adults || 0) : 0,
-            kidsComing: status === 'yes' ? Number(kids || 0) : 0,
+            adultsComing: String(status === 'yes' ? Number(adults || 0) : 0),
+            kidsComing: String(status === 'yes' ? Number(kids || 0) : 0),
             message
-        }
+        })
 
         try {
             const response = await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: params
             })
             const payload = await response.json()
 
@@ -174,10 +170,10 @@ ${EVENT.address}`} />
                                     </div>
 
                                     <label>
-                                        <span>Invite code {isCodeLocked ? '(locked from link)' : ''}</span>
+                                        <span>Invite code</span>
                                         <div className="invite-row">
-                                            <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required disabled={isCodeLocked} className={isCodeLocked ? 'locked-input' : ''} />
-                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite || isCodeLocked}>{isCodeLocked ? 'Locked' : (loadingInvite ? 'Checking...' : 'Check')}</button>
+                                            <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required />
+                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite}>{loadingInvite ? 'Checking...' : 'Check'}</button>
                                         </div>
                                     </label>
 
