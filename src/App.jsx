@@ -3,7 +3,6 @@ import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, HelpCircle, Users } 
 
 const EVENT = {
     title: 'Liya is Turning TWO!',
-    tagline: "With a super dee duper hug and a big ‘I love you’… come celebrate Liya turning TWO!",
     date: 'Sunday, June 14',
     time: '2:00 PM',
     location: 'Hyatt Place Garden City',
@@ -14,7 +13,7 @@ const EVENT = {
 
 // Add your image at: public/invitation.png
 const INVITATION_IMAGE_URL = '/invitation.png'
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFdxXeMi8B9WAxC51ykGxTDbB3-7c5OCgvW-h316QJENjCxhV9yXla4StYlaLkoogN/exec'
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_RNUxbDuCXBa01mKmlZFF9l8Zd5iWzSKWTv2GmVspvz05dNtBEQ0e1btDW1Klvxnk/exec'
 
 export default function App() {
     const [inviteCode, setInviteCode] = useState('')
