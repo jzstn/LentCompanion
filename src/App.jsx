@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, HelpCircle, Users } from 'lucide-react'
+import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, Users } from 'lucide-react'
 
 const EVENT = {
     title: 'Liya is Turning TWO!',
@@ -13,7 +13,7 @@ const EVENT = {
 
 // Add your image at: public/invitation.png
 const INVITATION_IMAGE_URL = '/invitation.png'
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_RNUxbDuCXBa01mKmlZFF9l8Zd5iWzSKWTv2GmVspvz05dNtBEQ0e1btDW1Klvxnk/exec'
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxg0_fpMxl1_uRs4UNSfVhorltRp8uw_ldn4zc2i9ZO9LhyJEpPFlE7Tc1hq7JypQcL/exec'
 
 export default function App() {
     const [inviteCode, setInviteCode] = useState('')
@@ -23,6 +23,7 @@ export default function App() {
     const [message, setMessage] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [loadingInvite, setLoadingInvite] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
     const [inviteError, setInviteError] = useState('')
     const [saveError, setSaveError] = useState('')
     const [guest, setGuest] = useState(null)
@@ -58,7 +59,6 @@ export default function App() {
         setInviteError('')
         setSaveError('')
         setApiOffline(false)
-        setApiOffline(false)
 
         try {
             const response = await fetch(`${APPS_SCRIPT_URL}?code=${encodeURIComponent(code)}`)
@@ -71,6 +71,8 @@ export default function App() {
             }
 
             setGuest(payload.guest)
+            setAdults(Number(payload.guest?.adultsInvited ?? 0))
+            setKids(Number(payload.guest?.kidsInvited ?? 0))
             setInviteError('')
             setApiOffline(false)
         } catch (_error) {
@@ -105,6 +107,7 @@ export default function App() {
         }
 
         try {
+            setSubmitting(true)
             const response = await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -128,6 +131,8 @@ export default function App() {
         } catch (_error) {
             setApiOffline(true)
             setSaveError('Network error while sending RSVP. Please try again.')
+        } finally {
+            setSubmitting(false)
         }
     }
 
@@ -145,7 +150,8 @@ export default function App() {
             <div className="container">
                 <header className="header">
                     {apiOffline && <p className="api-warning">⚠️ RSVP service is temporarily offline. You can still view the invite.</p>}
-                    <p className="eyebrow">Hosted by Justin & Merlin Varghese </p>
+                    <p className="eyebrow">Hosted by Justin & Merlin Varghese</p>
+                  
                     <h1>{EVENT.title}</h1>
                     <p className="tagline">{EVENT.tagline}</p>
                 </header>
@@ -181,7 +187,9 @@ ${EVENT.address}`} />
                                         <span>Invite code</span>
                                         <div className="invite-row">
                                             <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required />
-                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite}>{loadingInvite ? 'Checking...' : 'Check'}</button>
+                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite}>
+                                                {loadingInvite ? <><span className="spinner" aria-hidden="true" />Checking...</> : 'Check'}
+                                            </button>
                                         </div>
                                     </label>
 
@@ -193,7 +201,6 @@ ${EVENT.address}`} />
 
                                     <div className="choices">
                                         <RsvpChoice active={status === 'yes'} onClick={() => setStatus('yes')} icon={<CheckCircle2 />} label="Yes" />
-                                        <RsvpChoice active={status === 'maybe'} onClick={() => setStatus('maybe')} icon={<HelpCircle />} label="Maybe" />
                                         <RsvpChoice active={status === 'no'} onClick={() => setStatus('no')} icon={<XCircle />} label="No" />
                                     </div>
 
@@ -214,13 +221,15 @@ ${EVENT.address}`} />
                                     </label>
 
                                     {saveError && <p className="error">{saveError}</p>}
-                                    <button className="primary-btn" type="submit" disabled={!guest || exceedsLimit}>Submit RSVP</button>
+                                    <button className="primary-btn" type="submit" disabled={!guest || exceedsLimit || submitting}>
+                                        {submitting ? <><span className="spinner" aria-hidden="true" />Submitting...</> : 'Submit RSVP'}
+                                    </button>
                                 </form>
                             ) : (
                                 <div className="success-state">
                                     <div className="success-icon"><CheckCircle2 /></div>
                                     <h3>RSVP received!</h3>
-                                    <p>Thank you. Your RSVP has been saved with Mommy.</p>
+                                    <p>Thank you. Your RSVP has been saved with Mommy</p>
                                     <button onClick={resetForm} className="outline-btn" type="button">Update RSVP</button>
                                 </div>
                             )}
