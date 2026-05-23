@@ -145,7 +145,7 @@ export default function App() {
             <div className="container">
                 <header className="header">
                     {apiOffline && <p className="api-warning">⚠️ RSVP service is temporarily offline. You can still view the invite.</p>}
-                    <p className="eyebrow">Private Event RSVP</p>
+                    <p className="eyebrow">Hosted by Justin & Merlin Varghese </p>
                     <h1>{EVENT.title}</h1>
                     <p className="tagline">{EVENT.tagline}</p>
                 </header>
