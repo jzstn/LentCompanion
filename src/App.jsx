@@ -220,7 +220,7 @@ ${EVENT.address}`} />
                                 <div className="success-state">
                                     <div className="success-icon"><CheckCircle2 /></div>
                                     <h3>RSVP received!</h3>
-                                    <p>Thank you. Your RSVP has been saved in Google Sheets.</p>
+                                    <p>Thank you. Your RSVP has been saved with Mommy.</p>
                                     <button onClick={resetForm} className="outline-btn" type="button">Update RSVP</button>
                                 </div>
                             )}
