@@ -14,7 +14,7 @@ const EVENT = {
 
 // Add your image at: public/invitation.png
 const INVITATION_IMAGE_URL = '/invitation.png'
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYDI1BUMiqJ7cN_xh-vQ6giXm3bXaLAYdFskrH-Bhk1yUhCwUFjblKH6x06x5K06Am/exec'
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFdxXeMi8B9WAxC51ykGxTDbB3-7c5OCgvW-h316QJENjCxhV9yXla4StYlaLkoogN/exec'
 
 export default function App() {
     const [inviteCode, setInviteCode] = useState('')
@@ -28,14 +28,12 @@ export default function App() {
     const [saveError, setSaveError] = useState('')
     const [guest, setGuest] = useState(null)
     const [apiOffline, setApiOffline] = useState(false)
-    const [isCodeLocked, setIsCodeLocked] = useState(false)
 
     useEffect(() => {
         const urlCode = new URLSearchParams(window.location.search).get('code') || ''
         if (urlCode) {
             const normalized = urlCode.trim().toUpperCase()
             setInviteCode(normalized)
-            setIsCodeLocked(true)
             lookupInvite(normalized)
         }
     }, [])
@@ -99,7 +97,7 @@ export default function App() {
             return
         }
 
-        const body = {
+        const payloadBody = {
             code: inviteCode.trim().toUpperCase(),
             status,
             adultsComing: status === 'yes' ? Number(adults || 0) : 0,
@@ -110,10 +108,17 @@ export default function App() {
         try {
             const response = await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payloadBody)
             })
-            const payload = await response.json()
+            const raw = await response.text()
+            let payload = null
+            try {
+                payload = JSON.parse(raw)
+            } catch (_parseError) {
+                setSaveError(`RSVP service returned an invalid response: ${raw.slice(0, 120)}`)
+                return
+            }
 
             if (!payload.ok) {
                 setSaveError(payload.error || 'Could not save RSVP. Please try again.')
@@ -174,10 +179,10 @@ ${EVENT.address}`} />
                                     </div>
 
                                     <label>
-                                        <span>Invite code {isCodeLocked ? '(locked from link)' : ''}</span>
+                                        <span>Invite code</span>
                                         <div className="invite-row">
-                                            <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required disabled={isCodeLocked} className={isCodeLocked ? 'locked-input' : ''} />
-                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite || isCodeLocked}>{isCodeLocked ? 'Locked' : (loadingInvite ? 'Checking...' : 'Check')}</button>
+                                            <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required />
+                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite}>{loadingInvite ? 'Checking...' : 'Check'}</button>
                                         </div>
                                     </label>
 
