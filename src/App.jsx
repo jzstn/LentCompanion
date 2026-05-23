@@ -14,7 +14,7 @@ const EVENT = {
 
 // Add your image at: public/invitation.png
 const INVITATION_IMAGE_URL = '/invitation.png'
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYDI1BUMiqJ7cN_xh-vQ6giXm3bXaLAYdFskrH-Bhk1yUhCwUFjblKH6x06x5K06Am/exec'
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_RNUxbDuCXBa01mKmlZFF9l8Zd5iWzSKWTv2GmVspvz05dNtBEQ0e1btDW1Klvxnk/exec'
 
 export default function App() {
     const [inviteCode, setInviteCode] = useState('')
