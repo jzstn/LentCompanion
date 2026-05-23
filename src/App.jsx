@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, HelpCircle, Users } from 'lucide-react'
 
 const EVENT = {
@@ -14,7 +14,7 @@ const EVENT = {
 
 // Add your image at: public/invitation.png
 const INVITATION_IMAGE_URL = '/invitation.png'
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFdxXeMi8B9WAxC51ykGxTDbB3-7c5OCgvW-h316QJENjCxhV9yXla4StYlaLkoogN/exec'
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwj3hNkXoFiFxJuFjB1mPJx1OleYSGaN6M3qhzIVqUm8W4FWOCNLkBkWjN_MVP28l7q/exec'
 
 export default function App() {
     const [inviteCode, setInviteCode] = useState('')
@@ -27,6 +27,7 @@ export default function App() {
     const [inviteError, setInviteError] = useState('')
     const [saveError, setSaveError] = useState('')
     const [guest, setGuest] = useState(null)
+    const [apiOffline, setApiOffline] = useState(false)
 
     useEffect(() => {
         const urlCode = new URLSearchParams(window.location.search).get('code') || ''
@@ -50,12 +51,15 @@ export default function App() {
         if (!code) {
             setGuest(null)
             setInviteError('')
+            setApiOffline(false)
             return
         }
 
         setLoadingInvite(true)
         setInviteError('')
         setSaveError('')
+        setApiOffline(false)
+        setApiOffline(false)
 
         try {
             const response = await fetch(`${APPS_SCRIPT_URL}?code=${encodeURIComponent(code)}`)
@@ -69,8 +73,10 @@ export default function App() {
 
             setGuest(payload.guest)
             setInviteError('')
+            setApiOffline(false)
         } catch (_error) {
             setGuest(null)
+            setApiOffline(true)
             setInviteError('Unable to connect to guest list right now. Please try again.')
         } finally {
             setLoadingInvite(false)
@@ -114,6 +120,7 @@ export default function App() {
 
             setSubmitted(true)
         } catch (_error) {
+            setApiOffline(true)
             setSaveError('Network error while sending RSVP. Please try again.')
         }
     }
@@ -131,6 +138,7 @@ export default function App() {
         <div className="app-shell">
             <div className="container">
                 <header className="header">
+                    {apiOffline && <p className="api-warning">⚠️ RSVP service is temporarily offline. You can still view the invite.</p>}
                     <p className="eyebrow">Private Event RSVP</p>
                     <h1>{EVENT.title}</h1>
                     <p className="tagline">{EVENT.tagline}</p>
