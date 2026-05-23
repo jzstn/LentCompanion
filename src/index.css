@@ -35,3 +35,10 @@ textarea { resize: vertical; min-height: 96px; }
 .success-icon { width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 999px; background: #dcfce7; color: #15803d; display: grid; place-items: center; }
 .contact { display: flex; align-items: center; gap: 8px; background: #ffffffb3; border-radius: 20px; border: 1px solid #e2e8f0; padding: 12px 14px; color: #64748b; font-size: .9rem; }
 @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .info-grid,.choices,.num-grid { grid-template-columns: 1fr; } }
+
+
+.image-help { margin: 8px; font-size: .82rem; color: #64748b; text-align: center; }
+.limit-box { display:flex; align-items:center; gap:8px; background:#eef2ff; color:#4338ca; border:1px solid #c7d2fe; border-radius:12px; padding:10px 12px; font-size:.9rem; }
+.helper { margin: 0; color:#475569; font-size:.88rem; }
+.error { margin: 0; color:#b91c1c; font-size:.88rem; font-weight:600; }
+.primary-btn:disabled { opacity:.55; cursor:not-allowed; }
