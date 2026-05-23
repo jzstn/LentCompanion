@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CalendarDays, MapPin, Mail, CheckCircle2, XCircle, HelpCircle, Users } from 'lucide-react'
 
 const EVENT = {
@@ -27,12 +27,15 @@ export default function App() {
     const [inviteError, setInviteError] = useState('')
     const [saveError, setSaveError] = useState('')
     const [guest, setGuest] = useState(null)
+    const [apiOffline, setApiOffline] = useState(false)
+    const [isCodeLocked, setIsCodeLocked] = useState(false)
 
     useEffect(() => {
         const urlCode = new URLSearchParams(window.location.search).get('code') || ''
         if (urlCode) {
             const normalized = urlCode.trim().toUpperCase()
             setInviteCode(normalized)
+            setIsCodeLocked(true)
             lookupInvite(normalized)
         }
     }, [])
@@ -50,12 +53,15 @@ export default function App() {
         if (!code) {
             setGuest(null)
             setInviteError('')
+            setApiOffline(false)
             return
         }
 
         setLoadingInvite(true)
         setInviteError('')
         setSaveError('')
+        setApiOffline(false)
+        setApiOffline(false)
 
         try {
             const response = await fetch(`${APPS_SCRIPT_URL}?code=${encodeURIComponent(code)}`)
@@ -69,8 +75,10 @@ export default function App() {
 
             setGuest(payload.guest)
             setInviteError('')
+            setApiOffline(false)
         } catch (_error) {
             setGuest(null)
+            setApiOffline(true)
             setInviteError('Unable to connect to guest list right now. Please try again.')
         } finally {
             setLoadingInvite(false)
@@ -114,6 +122,7 @@ export default function App() {
 
             setSubmitted(true)
         } catch (_error) {
+            setApiOffline(true)
             setSaveError('Network error while sending RSVP. Please try again.')
         }
     }
@@ -131,6 +140,7 @@ export default function App() {
         <div className="app-shell">
             <div className="container">
                 <header className="header">
+                    {apiOffline && <p className="api-warning">⚠️ RSVP service is temporarily offline. You can still view the invite.</p>}
                     <p className="eyebrow">Private Event RSVP</p>
                     <h1>{EVENT.title}</h1>
                     <p className="tagline">{EVENT.tagline}</p>
@@ -164,10 +174,10 @@ ${EVENT.address}`} />
                                     </div>
 
                                     <label>
-                                        <span>Invite code</span>
+                                        <span>Invite code {isCodeLocked ? '(locked from link)' : ''}</span>
                                         <div className="invite-row">
-                                            <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required />
-                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite}>{loadingInvite ? 'Checking...' : 'Check'}</button>
+                                            <input value={inviteCode} onChange={(e) => setInviteCode(e.target.value.toUpperCase())} placeholder="Example: LIYA001" required disabled={isCodeLocked} className={isCodeLocked ? 'locked-input' : ''} />
+                                            <button type="button" className="lookup-btn" onClick={() => lookupInvite(inviteCode)} disabled={loadingInvite || isCodeLocked}>{isCodeLocked ? 'Locked' : (loadingInvite ? 'Checking...' : 'Check')}</button>
                                         </div>
                                     </label>
 
