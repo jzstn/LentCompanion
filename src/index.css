@@ -24,7 +24,7 @@ label { display: grid; gap: 8px; }
 label span { font-size: .88rem; font-weight: 700; color: #334155; }
 input, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 16px; padding: 12px 14px; font: inherit; background: #f8fafc; }
 textarea { resize: vertical; min-height: 96px; }
-.choices { display: grid; gap: 10px; grid-template-columns: repeat(3,minmax(0,1fr)); }
+.choices { display: grid; gap: 10px; grid-template-columns: repeat(2,minmax(0,1fr)); }
 .choice { border: 1px solid #cbd5e1; border-radius: 16px; padding: 12px; text-align: left; background: #fff; display: grid; gap: 8px; cursor: pointer; }
 .choice.active { border-color: #6d28d9; background: #f5f3ff; color: #5b21b6; box-shadow: 0 0 0 4px #ede9fe; }
 .num-grid { display: grid; gap: 10px; grid-template-columns: repeat(2,minmax(0,1fr)); }
